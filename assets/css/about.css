@@ -14,6 +14,7 @@
 .edu span{color:var(--bone-2);grid-column:1}
 .edu .years{grid-column:2;grid-row:1 / span 2;font-family:var(--f-mono);font-stretch:87.5%;font-size:.75rem;line-height:1.7;color:var(--amber);text-align:right;white-space:nowrap}
 .course{display:flex;flex-direction:column;gap:.35rem;margin-top:.4rem;color:var(--bone-2)}
+.course b{font-weight:600;color:var(--bone)}
 .skills{display:grid;grid-template-columns:1fr;gap:1.6rem 2.5rem;align-content:start}
 @media (min-width:560px){ .skills{grid-template-columns:repeat(2,minmax(0,1fr))} }
 .skills div{border-top:2px solid rgba(110,231,234,.5);padding-top:.8rem}
