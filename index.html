@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mohit Kumar · AI Engineer</title>
+<meta name="description" content="Mohit Kumar is an AI engineer working on generative AI, retrieval, LLM agents and machine learning systems, and an M.S. student in Engineering Design at IIT Madras.">
+<meta name="theme-color" content="#B9B9BA">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400..900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martian+Mono:wdth,wght@75..112.5,100..800&display=swap">
+<style>
+/*
+  Direction: two high-key black-and-white portraits bookend a dark middle.
+  The hero is silver studio grey, with the amber visor as the only colour; on load the colour
+  sweeps across the visor and out along its light trail. The black jacket at the bottom of the
+  photo runs straight into the near-black page, where the projects float as glassy holographic
+  panels. Contact closes on bright paper with a second black-and-white portrait.
+*/
+:root{
+  --silver:#B9B9BA; --paper:#F0F0F0; --ink:#0D0E0F; --ink-2:#34373A;
+  --jacket:#050506; --deep:#0A0B0C; --deep-2:#101213;
+  --bone:#EEE8DD; --bone-2:#C9CCCC; --mute:#9DA3A4;
+  --amber:#FFB43A; --orange:#FF6A1F;
+  --cyan:#6EE7EA; --violet:#A893FF;
+  --focus:var(--amber);
+  --f-display:"Anybody","Arial Narrow",Impact,sans-serif;
+  --f-body:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif;
+  --f-mono:"Martian Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --wrap:76rem;
+  --gut:clamp(16px,4vw,48px);
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+body{margin:0;background:var(--deep);color:var(--bone);font-family:var(--f-body);font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:clip}
+img{display:block;max-width:100%}
+p,h1,h2,h3,ul,ol,dl,dd,figure{margin:0}
+ul,ol{padding:0;list-style:none}
+a{color:var(--cyan);text-underline-offset:.22em;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+::selection{background:var(--orange);color:#1A0B03}
+:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:4px}
+
+/* Film grain over everything; static, so it costs nothing in motion */
+body::after{content:"";position:fixed;inset:0;z-index:100;pointer-events:none;opacity:.11;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 1.4 -.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-inline:max(var(--gut),env(safe-area-inset-left,0px)) max(var(--gut),env(safe-area-inset-right,0px))}
+.skip{position:absolute;left:var(--gut);top:-4rem;z-index:200;background:var(--amber);color:#1A0B03;font-weight:600;padding:.6rem 1rem;border-radius:8px;text-decoration:none}
+.skip:focus{top:1rem}
+
+.kicker{font-family:var(--f-mono);font-stretch:87.5%;font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+h2{font-family:var(--f-display);font-stretch:62%;font-weight:850;text-transform:uppercase;font-size:clamp(2.75rem,8vw,5.5rem);line-height:.88;letter-spacing:-.005em}
+h3{font-family:var(--f-display);font-stretch:75%;font-weight:780;font-size:clamp(1.6rem,3vw,2.1rem);line-height:1;letter-spacing:-.005em}
+.sec-head{display:flex;flex-direction:column;gap:.9rem;margin-bottom:clamp(2rem,5vw,3.5rem)}
+.sec-head p:not(.kicker){color:var(--bone-2);max-width:52ch}
+
+/* ───────── Hero ───────── */
+.hero{
+  --nav:4rem;                                        /* nav bar height */
+  --ph:min(calc(100svh - var(--nav)),64vw,60rem);    /* portrait height: fills the screen under the nav */
+  --pw:calc(var(--ph) * .7534);                      /* hero.jpg is 880 × 1168 */
+  --left:max(var(--gut),calc((100vw - var(--wrap)) / 2 + var(--gut)));  /* where the text column starts */
+  --room:calc(100vw - var(--left) - var(--pw) * .9); /* width left for the name */
+  --fs:min(13.5rem,23svh,calc(var(--room) / 2.36)); /* name size: "KUMAR" is 2.32em wide */
+  --kick:2.4rem;                                     /* kicker line + gap above the name */
+  --focus:var(--ink);
+  position:relative;isolation:isolate;overflow:hidden;color:var(--ink);
+  min-height:calc(var(--nav) + var(--ph));
+  /* matches the photo's own backdrop (darker at the top, lifting to pale grey), measured up from the
+     bottom so it still lines up when the text column makes the hero taller than the photo */
+  background:linear-gradient(to top,#CFCFD0 0,#D1D0D0 calc(var(--ph) * .5),#C2C2C3 calc(var(--ph) * .8),
+    var(--silver) var(--ph),#B4B4B5 100%);
+}
+.nav{width:100%;height:var(--nav);position:relative;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.mark{font-family:var(--f-display);font-stretch:62%;font-weight:850;font-size:1.6rem;letter-spacing:.02em;color:var(--ink);text-decoration:none;line-height:1}
+.nav ul{display:flex;gap:clamp(.9rem,3vw,2.25rem)}
+.nav a:not(.mark){font-family:var(--f-mono);font-stretch:87.5%;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);text-decoration:none}
+.nav a:not(.mark):hover{text-decoration:underline}
+
+/* Text column on the left; the portrait is pinned to the right edge, full height */
+.hero-main{position:static;display:flex;flex-direction:column;min-height:var(--ph);
+  padding:max(1.25rem,calc(var(--ph) * .29 - var(--kick) - var(--fs) * .8)) calc(var(--pw) * .9) clamp(2.5rem,6vh,4rem) var(--left)}
+.hero .kicker{position:relative;z-index:2;color:var(--ink-2);margin-bottom:1.15rem;line-height:1.6;white-space:nowrap}
+.name{position:relative;z-index:2;font-family:var(--f-display);font-stretch:58%;font-weight:880;text-transform:uppercase;
+  font-size:var(--fs);line-height:.8;letter-spacing:-.01em;color:var(--ink)}
+.name span{display:block;width:max-content}
+
+.hero-shot{position:absolute;z-index:0;right:0;bottom:0;margin:0;height:var(--ph);width:var(--pw);
+  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 9%),linear-gradient(to bottom,transparent 0,#000 3%);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to right,transparent 0,#000 9%),linear-gradient(to bottom,transparent 0,#000 3%);
+  mask-composite:intersect}
+.hero-shot img{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover}
+.shot-mono{filter:grayscale(1)}
+/* a flash of light off the visor as it powers on */
+.flare{position:absolute;left:10%;top:13%;width:72%;height:32%;pointer-events:none;opacity:0;mix-blend-mode:screen;
+  background:radial-gradient(closest-side,rgba(255,214,140,.95),rgba(255,120,36,.55) 45%,transparent);filter:blur(8px)}
+
+.hero-tail{position:relative;z-index:2}
+.lede{max-width:31ch;margin-top:1.75rem;font-size:clamp(1.1rem,1.6vw,1.3rem);line-height:1.45;color:var(--ink-2)}
+.cta{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.6rem}
+.btn{display:inline-flex;align-items:center;gap:.5rem;font-weight:600;font-size:1rem;text-decoration:none;border-radius:999px;padding:.8rem 1.35rem;transition:transform .2s ease,background-color .2s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn-hot{background:var(--orange);color:#1A0B03}
+.btn-hot:hover{background:#FF8240}
+.btn-line{color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn-line:hover{background:rgba(13,14,15,.08)}
+.hero-social{display:flex;flex-wrap:wrap;gap:.25rem 1.6rem;margin-top:1.3rem}
+.hero-social a{display:inline-block;padding-block:.35rem;font-family:var(--f-mono);font-stretch:87.5%;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink);text-decoration-color:rgba(13,14,15,.4);text-underline-offset:.35em}
+.hero-social a:hover{text-decoration-color:currentColor}
+
+/* The one orchestrated moment: the visor powers on, and its colour sweeps out along the light trail */
+@media (prefers-reduced-motion: no-preference){
+  .shot-color{-webkit-mask-image:linear-gradient(to right,#000 44%,transparent 56%);mask-image:linear-gradient(to right,#000 44%,transparent 56%);
+    -webkit-mask-size:300% 100%;mask-size:300% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+    -webkit-mask-position:0 0;mask-position:0 0;
+    animation:power 1.6s cubic-bezier(.55,0,.25,1) .4s both}
+  .flare{animation:flare 1.5s ease-out .65s both}
+  @keyframes power{from{-webkit-mask-position:100% 0;mask-position:100% 0}to{-webkit-mask-position:0 0;mask-position:0 0}}
+  @keyframes flare{0%{opacity:0}30%{opacity:.85}100%{opacity:0}}
+}
+
+/* Phone and narrow tablet: name, then the portrait full-bleed, then the jacket runs into a dark band holding the intro */
+@media (max-width:759px){
+  .hero{--nav:3.5rem;--fs:calc((100vw - var(--gut) * 2) / 2.36);min-height:0;background:var(--silver)}
+  .hero-main{min-height:0;padding:.75rem var(--gut) 0}
+  .hero .kicker{margin-bottom:.9rem}
+  .hero-shot{position:relative;right:auto;bottom:auto;width:auto;height:auto;aspect-ratio:880 / 1168;
+    margin:1.25rem calc(var(--gut) * -1) 0;
+    -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 7%);mask-image:linear-gradient(to bottom,transparent 0,#000 7%)}
+  .hero-tail{--focus:var(--amber);margin-inline:calc(var(--gut) * -1);padding:.25rem var(--gut) 3rem;background:var(--jacket)}
+  .lede{margin-top:0;color:var(--bone)}
+  .btn-line{color:var(--bone);box-shadow:inset 0 0 0 1.5px rgba(238,232,221,.75)}
+  .btn-line:hover{background:rgba(238,232,221,.1)}
+  .hero-social a{color:var(--bone);text-decoration-color:rgba(238,232,221,.45)}
+}
+
+/* ───────── Work ───────── */
+.work{position:relative;overflow:clip;padding-block:clamp(4.5rem,10vw,8rem) clamp(3.5rem,7vw,5rem);
+  background:
+    linear-gradient(to bottom,transparent calc(100% - 14rem),var(--deep)),
+    radial-gradient(38rem 26rem at 8% 12%,rgba(110,231,234,.13),transparent 70%),
+    radial-gradient(34rem 30rem at 92% 30%,rgba(168,147,255,.15),transparent 70%),
+    radial-gradient(30rem 22rem at 30% 70%,rgba(255,106,31,.07),transparent 70%),
+    radial-gradient(40rem 30rem at 85% 92%,rgba(110,231,234,.10),transparent 70%),
+    linear-gradient(to bottom,var(--jacket),var(--deep) 18rem,var(--deep))}
+/* blurred office lights behind the glass */
+.work::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;
+  background:
+    radial-gradient(3rem 3rem at 14% 28%,rgba(110,231,234,.35),transparent 70%),
+    radial-gradient(2rem 2rem at 22% 34%,rgba(255,180,90,.25),transparent 70%),
+    radial-gradient(4rem 4rem at 78% 18%,rgba(168,147,255,.32),transparent 70%),
+    radial-gradient(2.5rem 2.5rem at 88% 52%,rgba(110,231,234,.28),transparent 70%),
+    radial-gradient(3.5rem 3.5rem at 6% 66%,rgba(168,147,255,.25),transparent 70%),
+    radial-gradient(2rem 2rem at 60% 84%,rgba(255,180,90,.2),transparent 70%)}
+.work .wrap{position:relative}
+
+.holo{--ry:0deg;--rx:3deg;position:relative;display:flex;flex-direction:column;gap:.85rem;min-width:0;
+  padding:clamp(1.25rem,2.5vw,1.75rem);border-radius:20px;
+  background:linear-gradient(155deg,rgba(150,236,255,.11),rgba(168,147,255,.06) 55%,rgba(255,255,255,.025));
+  -webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1px rgba(110,231,234,.10),0 0 46px -10px rgba(110,231,234,.38),0 0 60px -18px rgba(168,147,255,.35),0 36px 70px -34px rgba(0,0,0,.9);
+  transform:perspective(1600px) rotateX(var(--rx)) rotateY(var(--ry));
+  transition:transform .45s cubic-bezier(.2,.7,.2,1),box-shadow .45s ease}
+.holo::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
+  background:linear-gradient(140deg,rgba(110,231,234,.85),rgba(110,231,234,.1) 32%,rgba(168,147,255,.1) 66%,rgba(168,147,255,.8));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+/* light projected up from below the panel */
+.holo::after{content:"";position:absolute;left:12%;right:12%;bottom:-34px;height:44px;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(110,231,234,.32),transparent);filter:blur(8px)}
+.holo:hover,.holo:focus-within{--ry:0deg;--rx:0deg;transform:perspective(1600px) translateY(-4px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 0 0 1px rgba(110,231,234,.2),0 0 60px -8px rgba(110,231,234,.5),0 0 80px -16px rgba(168,147,255,.5),0 40px 80px -34px rgba(0,0,0,.95)}
+@media (prefers-reduced-motion: reduce){ .holo{transition:none} .btn{transition:none} .btn:hover{transform:none} }
+.holo .kicker{color:var(--cyan)}
+.holo h3 small{display:block;margin-top:.45rem;font-family:var(--f-body);font-stretch:100%;font-size:1rem;font-weight:500;line-height:1.35;color:var(--bone-2)}
+.result{font-family:var(--f-mono);font-stretch:87.5%;font-size:.85rem;font-weight:600;color:var(--amber);font-variant-numeric:tabular-nums}
+.desc{color:var(--bone-2);max-width:62ch}
+.stack{display:flex;flex-wrap:wrap;gap:.4rem}
+.stack li{font-family:var(--f-mono);font-stretch:87.5%;font-size:.68rem;color:var(--bone-2);padding:.2rem .5rem;border-radius:6px;background:rgba(110,231,234,.07);box-shadow:inset 0 0 0 1px rgba(110,231,234,.2)}
+.links{display:flex;flex-wrap:wrap;gap:.5rem 1.4rem;margin-top:auto;padding-top:.35rem}
+.links a{font-weight:600;color:var(--bone);text-decoration-color:rgba(110,231,234,.6)}
+.links a:hover{color:var(--cyan)}
+.viz{margin:-.25rem 0 .35rem;padding:.75rem .5rem .25rem;border-radius:12px;background:linear-gradient(to bottom,rgba(110,231,234,.06),transparent)}
+.viz svg{display:block;width:100%;height:auto;overflow:visible;filter:drop-shadow(0 0 4px rgba(110,231,234,.55))}
+.viz .s{fill:none;stroke:var(--cyan);stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+.viz .v{fill:none;stroke:var(--violet);stroke-width:1.3}
+.viz .d{stroke-dasharray:4 4}
+.viz .f{fill:var(--cyan)}
+.viz .fv{fill:var(--violet)}
+.viz .fa{fill:var(--amber)}
+.viz text{font-family:var(--f-mono);font-size:9px;fill:var(--bone-2);letter-spacing:.02em}
+.viz text.c{text-anchor:middle}
+.viz text.e{text-anchor:end}
+
+.feature{display:grid;grid-template-columns:1fr;gap:1.5rem 3rem;margin-bottom:clamp(2.5rem,5vw,3.5rem)}
+.feature .viz{margin:0;align-self:center}
+@media (min-width:900px){ .feature{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center} .feature .viz{grid-column:2;grid-row:1 / span 7} }
+.feature h3{font-size:clamp(2.2rem,5vw,3.6rem)}
+
+.grid{display:grid;grid-template-columns:1fr;gap:clamp(2.25rem,4vw,3rem) clamp(1.5rem,3vw,2.25rem)}
+@media (min-width:820px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid > .holo:nth-child(odd){--ry:5deg}
+  .grid > .holo:nth-child(even){--ry:-5deg}
+}
+
+
+/* ───────── Experience ───────── */
+.exp{padding-block:clamp(3rem,6vw,4.5rem) clamp(3.5rem,7vw,5rem);background:linear-gradient(to bottom,var(--deep),var(--deep-2))}
+.timeline > li{display:grid;grid-template-columns:1fr;gap:.5rem 3rem;padding-block:1.75rem;border-top:1px solid rgba(203,213,210,.16)}
+.timeline > li:last-child{border-bottom:1px solid rgba(203,213,210,.16)}
+@media (min-width:820px){ .timeline > li{grid-template-columns:12rem minmax(0,1fr)} }
+.when{font-family:var(--f-mono);font-stretch:87.5%;font-size:.78rem;color:var(--amber);padding-top:.35rem;font-variant-numeric:tabular-nums}
+.role{display:flex;flex-direction:column;gap:.35rem}
+.role h3{font-size:clamp(1.5rem,2.6vw,1.9rem)}
+.org{color:var(--bone-2)}
+.points{margin-top:.7rem;display:flex;flex-direction:column;gap:.55rem;max-width:68ch}
+.points li{position:relative;padding-left:1.4rem;color:var(--bone-2)}
+.points li::before{content:"";position:absolute;left:0;top:.72em;width:.8rem;height:2px;background:linear-gradient(to right,transparent,var(--orange))}
+.also{margin-top:clamp(3rem,6vw,4.5rem)}
+.also h3{margin-bottom:1.25rem;font-stretch:62%;text-transform:uppercase;font-weight:850;font-size:clamp(1.9rem,4vw,2.75rem)}
+.also ul{display:grid;grid-template-columns:1fr;gap:1rem 3rem}
+@media (min-width:820px){ .also ul{grid-template-columns:repeat(2,minmax(0,1fr))} }
+.also li{color:var(--bone-2);padding-left:1.4rem;position:relative}
+.also li::before{content:"";position:absolute;left:0;top:.72em;width:.8rem;height:2px;background:linear-gradient(to right,transparent,var(--cyan))}
+.also strong{color:var(--bone);font-weight:600}
+
+/* ───────── About ───────── */
+.about{padding-block:clamp(3rem,6vw,4.5rem) clamp(4rem,8vw,6rem);background:var(--deep-2)}
+.about-grid{display:grid;grid-template-columns:1fr;gap:3rem 4rem}
+@media (min-width:960px){ .about-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)} }
+.about-text{display:flex;flex-direction:column;gap:1.2rem}
+.about-text .lead{font-family:var(--f-display);font-stretch:85%;font-weight:600;font-size:clamp(1.45rem,2.6vw,1.95rem);line-height:1.2;color:var(--bone)}
+.about-text p:not(.lead){color:var(--bone-2);max-width:60ch}
+.edu{display:flex;flex-direction:column;gap:1.1rem;margin-top:1rem}
+.edu li{display:grid;grid-template-columns:1fr auto;gap:.15rem 1rem;padding-top:1rem;border-top:1px solid rgba(203,213,210,.16)}
+.edu b{font-weight:600;color:var(--bone)}
+.edu span{color:var(--bone-2);grid-column:1}
+.edu .score{grid-column:2;grid-row:1 / span 2;font-family:var(--f-mono);font-stretch:87.5%;font-size:.75rem;line-height:1.7;color:var(--amber);text-align:right;white-space:nowrap}
+.course{display:flex;flex-direction:column;gap:.35rem;margin-top:.4rem;color:var(--bone-2)}
+.skills{display:grid;grid-template-columns:1fr;gap:1.6rem 2.5rem;align-content:start}
+@media (min-width:560px){ .skills{grid-template-columns:repeat(2,minmax(0,1fr))} }
+.skills div{border-top:2px solid rgba(110,231,234,.5);padding-top:.8rem}
+.skills dt{font-family:var(--f-mono);font-stretch:87.5%;font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--cyan);margin-bottom:.4rem}
+.skills dd{color:var(--bone-2);font-size:.98rem}
+
+/* ───────── Contact ───────── */
+.contact{
+  --ch:clamp(36rem,56vw,48rem);                      /* portrait height */
+  --h2:clamp(3.4rem,9vw,8rem);
+  --cw:calc(var(--ch) * .7534);                      /* contact.jpg is 880 × 1168 */
+  --focus:var(--ink);
+  position:relative;overflow:hidden;isolation:isolate;background:var(--paper);color:var(--ink);min-height:var(--ch)}
+.contact-shot{position:absolute;z-index:0;right:0;bottom:0;margin:0;height:var(--ch);width:var(--cw)}
+.contact-shot img{width:100%;height:100%;max-width:none;object-fit:cover;
+  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 14%);mask-image:linear-gradient(to right,transparent 0,#000 14%)}
+.contact .wrap{position:relative;z-index:2;max-width:none;min-height:var(--ch);display:flex;flex-direction:column;gap:1.6rem;
+  /* top padding lines the heading up with his sunglasses, 41.3% down the photo */
+  padding:max(3rem,calc(var(--ch) * .413 - 2.8rem - var(--h2) * .37)) calc(var(--cw) + 1.5rem) 2rem max(var(--gut),calc((100vw - var(--wrap)) / 2 + var(--gut)))}
+.contact .kicker{color:var(--ink-2)}
+.contact h2{font-size:var(--h2);color:var(--ink)}
+.email-row{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem 1rem;margin-top:.5rem}
+.email{font-family:var(--f-mono);font-stretch:87.5%;font-size:clamp(.95rem,2.2vw,1.35rem);color:var(--ink);word-break:break-all}
+.copy-btn{font:600 .95rem var(--f-body);background:var(--ink);color:var(--paper);border:0;border-radius:999px;padding:.6rem 1.1rem;cursor:pointer}
+.copy-btn:hover{background:#2A2D30}
+.copy-status{font-family:var(--f-mono);font-stretch:87.5%;font-size:.75rem;color:var(--ink-2);min-height:1.2em}
+.socials{display:flex;flex-wrap:wrap;gap:.75rem 2rem}
+.socials a{color:var(--ink);font-weight:600;font-size:1.1rem;text-decoration-thickness:2px}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem 2rem;margin-top:auto;padding-top:1.25rem;border-top:1px solid rgba(13,14,15,.18);font-family:var(--f-mono);font-stretch:87.5%;font-size:.72rem;color:var(--ink-2)}
+
+/* Phone and narrow tablet: words first, then the portrait closes the page */
+@media (max-width:759px){
+  .contact{min-height:0}
+  .contact .wrap{min-height:0;padding:clamp(3.5rem,12vw,5rem) var(--gut) 2rem}
+  .foot{margin-top:1.5rem}
+  .contact-shot{position:relative;right:auto;bottom:auto;width:100%;height:auto;aspect-ratio:880 / 1168}
+  .contact-shot img{-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 6%);mask-image:linear-gradient(to bottom,transparent 0,#000 6%)}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#work">Skip to projects</a>
+
+<header class="hero" id="top">
+  <nav class="nav wrap" aria-label="Main">
+    <a class="mark" href="#top" aria-label="Mohit Kumar, back to top">MKS</a>
+    <ul>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero-main">
+    <p class="kicker">AI engineer · M.S. at IIT Madras</p>
+    <h1 class="name"><span>Mohit</span> <span>Kumar</span></h1>
+    <figure class="hero-shot">
+      <img class="shot-mono" src="images/hero.jpg" alt="" width="880" height="1168" aria-hidden="true">
+      <img class="shot-color" src="images/hero.jpg" alt="Mohit Kumar in a black jacket and an amber wraparound VR visor, with an orange light trail streaking off behind his head" width="880" height="1168" fetchpriority="high">
+      <span class="flare" aria-hidden="true"></span>
+    </figure>
+    <div class="hero-tail">
+      <p class="lede">I build generative AI systems end to end: retrieval pipelines, LLM agents and fine-tuned models, plus the infrastructure that runs them.</p>
+      <div class="cta">
+        <a class="btn btn-hot" href="#work">See my work</a>
+        <a class="btn btn-line" href="mailto:abhisheksindhu5@gmail.com">Email me</a>
+      </div>
+      <ul class="hero-social" aria-label="Elsewhere">
+        <li><a href="https://www.linkedin.com/in/mohit-kumar-sindhu">LinkedIn ↗</a></li>
+        <li><a href="https://github.com/MK-Sindhu">GitHub ↗</a></li>
+        <li><a href="https://x.com/MKSindhu4">X (Twitter) ↗</a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="work" id="work" aria-labelledby="work-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="kicker">Research and projects</p>
+        <h2 id="work-title">Selected work</h2>
+      </div>
+
+      <article class="holo feature" aria-labelledby="slot-title">
+        <div class="viz">
+          <svg viewBox="0 0 520 190" role="img" aria-label="Diagram: an assembly graph with one missing part is matched against a ranked library of 234,299 parts; the median rank of the correct part is 5.">
+            <path class="s" d="M48 62 L112 34 L178 70 L120 112 L48 62 M112 34 L120 112 M178 70 L190 136 M120 112 L64 150"/>
+            <path class="s d" d="M120 112 L190 136"/>
+            <circle class="f" cx="48" cy="62" r="6"/><circle class="f" cx="112" cy="34" r="6"/><circle class="f" cx="178" cy="70" r="6"/>
+            <circle class="f" cx="120" cy="112" r="6"/><circle class="f" cx="64" cy="150" r="6"/>
+            <circle class="v d" cx="190" cy="136" r="10"/><text class="c" x="190" y="139.5">?</text>
+            <text x="20" y="182">assembly graph · edges = mate constraints</text>
+            <path class="s" d="M222 92 H282 M276 86 L282 92 L276 98"/>
+            <text class="c" x="252" y="82">retrieve</text>
+            <text x="300" y="20">library · 234,299 parts</text>
+            <g>
+              <text class="e" x="320" y="42">#1</text><rect class="s" x="328" y="34" width="168" height="10" rx="3"/>
+              <text class="e" x="320" y="62">#2</text><rect class="s" x="328" y="54" width="156" height="10" rx="3"/>
+              <text class="e" x="320" y="82">#3</text><rect class="s" x="328" y="74" width="144" height="10" rx="3"/>
+              <text class="e" x="320" y="102">#4</text><rect class="s" x="328" y="94" width="132" height="10" rx="3"/>
+              <text class="e" x="320" y="122">#5</text><rect class="fa" x="328" y="114" width="120" height="10" rx="3"/>
+              <text class="e" x="320" y="142">#6</text><rect class="s" x="328" y="134" width="108" height="10" rx="3"/>
+              <text class="e" x="320" y="162">⋮</text>
+              <text x="456" y="122.5">median</text>
+            </g>
+          </svg>
+        </div>
+        <p class="kicker">Research · Computers &amp; Graphics, 3DOR 2026 special section</p>
+        <h3 id="slot-title">SLOT-GNN<small>A hierarchical graph neural network for finding the missing part in a CAD assembly</small></h3>
+        <p class="result">Median rank 5 of 234,299 parts · 35% better than the strongest baseline</p>
+        <p class="desc">Given an assembly with a part missing, SLOT-GNN retrieves the right part from a library of 234,299. It encodes each part's boundary representation as a graph and passes edge-conditioned messages over the assembly's mate constraints.</p>
+        <ul class="stack" aria-label="Methods"><li>Graph neural networks</li><li>B-rep encoder</li><li>Message passing</li><li>Retrieval</li></ul>
+        <p class="links"><a href="https://www.sciencedirect.com/science/article/pii/S0097849326001573">Read the paper ↗</a></p>
+      </article>
+
+      <div class="grid">
+        <article class="holo" aria-labelledby="ndstill-title">
+          <div class="viz">
+            <svg viewBox="0 0 320 120" role="img" aria-label="Diagram: an agent's transfer passes nine checks, then either goes out from the business's own bank account or is held for a person to approve.">
+              <rect class="v" x="2" y="42" width="70" height="32" rx="16"/>
+              <text class="c" x="37" y="56">agent</text><text class="c" x="37" y="67">transfer</text>
+              <path class="s" d="M74 58 H88 M83 53 L88 58 L83 63"/>
+              <text x="94" y="44">9 checks</text>
+              <rect class="s" x="94" y="52" width="8" height="12" rx="2"/><rect class="s" x="106" y="52" width="8" height="12" rx="2"/><rect class="s" x="118" y="52" width="8" height="12" rx="2"/><rect class="s" x="130" y="52" width="8" height="12" rx="2"/><rect class="s" x="142" y="52" width="8" height="12" rx="2"/><rect class="s" x="154" y="52" width="8" height="12" rx="2"/><rect class="s" x="166" y="52" width="8" height="12" rx="2"/><rect class="s" x="178" y="52" width="8" height="12" rx="2"/><rect class="s" x="190" y="52" width="8" height="12" rx="2"/>
+              <text x="94" y="80">caps · anomaly</text>
+              <path class="s" d="M200 58 C216 58 216 26 232 26"/>
+              <path class="s d" d="M200 58 C216 58 216 92 232 92"/>
+              <rect class="s" x="234" y="12" width="84" height="28" rx="6"/>
+              <text class="c" x="276" y="24">pays from</text><text class="c" x="276" y="35">your bank</text>
+              <rect class="v" x="234" y="78" width="84" height="28" rx="6"/>
+              <circle class="fa" cx="244" cy="92" r="3"/>
+              <text class="c" x="282" y="90">held for</text><text class="c" x="282" y="101">approval</text>
+              <text x="2" y="114">kill switch · audit log</text>
+            </svg>
+          </div>
+          <p class="kicker">Agentic payments · Early access</p>
+          <h3 id="ndstill-title">ndStill</h3>
+          <p class="result">Nine checks on every agent transfer, before any money moves</p>
+          <p class="desc">A non-custodial control plane for AI agent spending. Agents pay from a business's own bank accounts, and each one gets caps instead of a balance: per-transfer, daily and monthly limits. Transfers that are over a threshold or look unusual wait for a person to approve them, a kill switch freezes one agent or the whole organisation, and every step goes to an append-only audit log. Agents connect through a REST API or an MCP server.</p>
+          <ul class="stack" aria-label="Tech stack"><li>Rust</li><li>PostgreSQL</li><li>MCP server</li><li>REST API</li><li>Next.js</li></ul>
+          <p class="links"><a href="https://www.ndstill.com">Visit ndstill.com ↗</a></p>
+        </article>
+
+        <article class="holo" aria-labelledby="builder-title">
+          <div class="viz">
+            <svg viewBox="0 0 320 120" role="img" aria-label="Diagram: a text prompt becomes a running web app with its own preview URL, served by an autoscaled worker.">
+              <rect class="s" x="10" y="40" width="96" height="34" rx="17"/>
+              <text x="24" y="60.5">› prompt</text><path class="s" d="M80 50 V64"/>
+              <path class="s" d="M114 57 H146 M141 52 L146 57 L141 62"/>
+              <rect class="s" x="154" y="10" width="156" height="94" rx="7"/>
+              <path class="s" d="M154 26 H310"/>
+              <circle class="fv" cx="164" cy="18" r="2.5"/><circle class="fv" cx="173" cy="18" r="2.5"/><circle class="fv" cx="182" cy="18" r="2.5"/>
+              <rect class="v" x="196" y="14" width="104" height="8" rx="4"/>
+              <rect class="s" x="164" y="34" width="62" height="40" rx="4"/>
+              <path class="s" d="M236 38 H298 M236 50 H290 M236 62 H280"/>
+              <rect class="fa" x="164" y="82" width="40" height="12" rx="6"/>
+              <text x="156" y="118">live Vite + React 19 app</text>
+              <text x="10" y="92">EC2 worker per project</text>
+            </svg>
+          </div>
+          <p class="kicker">Generative AI · Developer tools</p>
+          <h3 id="builder-title">AI App Builder</h3>
+          <p class="result">Natural-language prompt → live React 19 app</p>
+          <p class="desc">Turns a prompt into a running Vite and React 19 app in TypeScript and Tailwind, with an in-browser code editor, project preview URLs and iterative edits. It runs on three tiers (Next.js 15, Express and Prisma) with AWS EC2 Auto Scaling workers. Each project gets its own worker, which is released when it goes idle to keep compute costs down.</p>
+          <ul class="stack" aria-label="Tech stack"><li>Next.js 15</li><li>Express</li><li>Prisma</li><li>AWS EC2 Auto Scaling</li><li>Docker Compose</li><li>Caddy</li></ul>
+          <p class="links"><a href="https://github.com/MK-Sindhu/ai-app-builder">View code on GitHub ↗</a></p>
+        </article>
+
+        <article class="holo" aria-labelledby="fraud-title">
+          <div class="viz">
+            <svg viewBox="0 0 320 120" role="img" aria-label="Diagram: data, training, registry and serving stages in a loop, where detected drift triggers retraining.">
+              <rect class="s" x="6" y="30" width="64" height="32" rx="6"/><text class="c" x="38" y="44">data</text><text class="c" x="38" y="55">DVC</text>
+              <rect class="s" x="86" y="30" width="64" height="32" rx="6"/><text class="c" x="118" y="44">train</text><text class="c" x="118" y="55">XGBoost</text>
+              <rect class="v" x="166" y="30" width="64" height="32" rx="6"/><text class="c" x="198" y="44">registry</text><text class="c" x="198" y="55">MLflow</text>
+              <rect class="s" x="246" y="30" width="68" height="32" rx="6"/><text class="c" x="280" y="44">serve</text><text class="c" x="280" y="55">FastAPI</text>
+              <path class="s" d="M70 46 H84 M150 46 H164 M230 46 H244"/>
+              <path class="s d" d="M280 64 C280 104 38 104 38 66"/><path class="s" d="M33 71 L38 64 L43 71"/>
+              <text class="c" x="160" y="112">drift detected → retrain · Airflow</text>
+              <text class="c" x="280" y="20">+ SHAP</text>
+            </svg>
+          </div>
+          <p class="kicker">MLOps · End to end</p>
+          <h3 id="fraud-title">Credit card fraud detection</h3>
+          <p class="result">Drift detection and feedback-driven retraining, automated</p>
+          <p class="desc">An XGBoost model served through FastAPI, with DVC for data versioning, MLflow for experiment tracking and registry promotion, SHAP explanations and feedback capture. Airflow handles drift detection and retraining. GitHub Actions, Prometheus, Grafana and AlertManager cover CI and monitoring, and it deploys on a load-balanced Docker Swarm.</p>
+          <ul class="stack" aria-label="Tech stack"><li>XGBoost</li><li>FastAPI</li><li>DVC</li><li>MLflow</li><li>Airflow</li><li>Prometheus</li><li>Docker Swarm</li></ul>
+          <p class="links"><a href="https://github.com/MK-Sindhu/mlops_E2E">View code on GitHub ↗</a></p>
+        </article>
+
+        <article class="holo" aria-labelledby="uptime-title">
+          <div class="viz">
+            <svg viewBox="0 0 320 120" role="img" aria-label="Diagram: regional workers check websites every 30 seconds and send results through Redis Streams into ClickHouse, which feeds a dashboard.">
+              <circle class="f" cx="22" cy="30" r="4"/><circle class="f" cx="22" cy="58" r="4"/><circle class="f" cx="22" cy="86" r="4"/>
+              <text x="8" y="112">regional workers</text>
+              <path class="s" d="M28 30 C58 30 58 58 82 58 M28 58 H82 M28 86 C58 86 58 58 82 58"/>
+              <text class="c" x="54" y="20">every 30 s</text>
+              <rect class="v" x="86" y="42" width="64" height="32" rx="6"/><text class="c" x="118" y="56">Redis</text><text class="c" x="118" y="67">Streams</text>
+              <path class="s" d="M150 58 H164 M159 53 L164 58 L159 63"/>
+              <rect class="s" x="168" y="42" width="78" height="32" rx="6"/><text class="c" x="207" y="56">ClickHouse</text><text class="c" x="207" y="67">views</text>
+              <path class="s" d="M246 58 H260 M255 53 L260 58 L255 63"/>
+              <rect class="s" x="264" y="30" width="50" height="56" rx="5"/>
+              <path class="s" d="M272 72 L280 62 L288 66 L296 50 L306 54"/>
+              <rect class="fa" x="272" y="38" width="20" height="6" rx="3"/>
+              <text class="c" x="289" y="104">p50 / p95</text>
+            </svg>
+          </div>
+          <p class="kicker">Distributed systems · Monitoring</p>
+          <h3 id="uptime-title">Uptime Watch</h3>
+          <p class="result">Website checks every 30 s from regional workers</p>
+          <p class="desc">Regional workers check websites every 30 seconds and deliver results over Redis Streams with acknowledge-after-write. Results are stored in ClickHouse, where materialized views compute hourly uptime, median and 95th-percentile latency, and incidents. These are served through OpenAPI REST APIs and a Next.js dashboard.</p>
+          <ul class="stack" aria-label="Tech stack"><li>Redis Streams</li><li>ClickHouse</li><li>PostgreSQL</li><li>Next.js</li><li>Kubernetes</li><li>GitHub Actions</li></ul>
+          <p class="links"><a href="https://github.com/MK-Sindhu/uptime-watch">View code on GitHub ↗</a></p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="exp" id="experience" aria-labelledby="exp-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="kicker">Internships, most recent first</p>
+        <h2 id="exp-title">Experience</h2>
+      </div>
+      <ol class="timeline">
+        <li>
+          <p class="when">Jun – Aug 2026</p>
+          <div class="role">
+            <h3>AI Intern</h3>
+            <p class="org">ORIGINN · startup discovery, hiring and pre-order platform</p>
+            <ul class="points">
+              <li>Built a generative AI screening pipeline that evaluated 120+ startup profiles and cut manual review from 40 minutes to 5 per startup, about 85% less time.</li>
+              <li>Designed a startup validation and scoring framework covering 55+ parameters across six sectors.</li>
+              <li>Reached about 82% agreement with founder-reviewed assessments across 30 cases by iterating on 15+ prompts against a structured evaluation set, which cut inconsistent outputs by about 40%.</li>
+              <li>Built an AI hiring agent that screens and ranks applications for first-pass shortlisting, and 12 REST API endpoints in TypeScript and Node.js behind the React frontend.</li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          <p class="when">Mar – Jun 2026</p>
+          <div class="role">
+            <h3>Agentic AI Developer Intern</h3>
+            <p class="org">Indobase.in · Terrarare Solutions Pvt. Ltd.</p>
+            <ul class="points">
+              <li>Fine-tuned a pretrained Phi-family language model with LoRA, PEFT and TRL SFTTrainer, deployed it through Ollama as GGUF, and A/B tested it against the base model.</li>
+              <li>Built a multi-agent editorial pipeline with planner and writer agents, a human approval gate and WordPress publishing, supporting two posts a week without manual formatting.</li>
+              <li>Built RAG assistants over product and policy documentation.</li>
+              <li>Deployed and ran a SaaS platform on a VPS with Docker, Traefik and Kong API gateway, fixing routing, CORS, JWT authentication, container networking and CI issues.</li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          <p class="when">Feb – May 2026</p>
+          <div class="role">
+            <h3>Process Engineering Intern</h3>
+            <p class="org">Uno Minda Ltd.</p>
+            <ul class="points">
+              <li>Helped design and set up a new automotive headlamp assembly line (YED model), from production goals and layout planning to equipment selection and test runs.</li>
+              <li>Helped design 12+ workstations and the material handling flow, and wrote standard work procedures and quality checkpoints for operator training and line handover.</li>
+            </ul>
+          </div>
+        </li>
+      </ol>
+
+      <div class="also">
+        <h3>Leadership</h3>
+        <ul>
+          <li><strong>Founding team member, Product, at ndStill</strong>: banking and spend-control infrastructure for AI agents. IIT Madras pre-incubation.</li>
+          <li><strong>AI Lead at Kognigen</strong>: IIT Madras pre-incubation.</li>
+          <li><strong>Placement Coordinator</strong>, Department of Engineering Design, IIT Madras, Jul 2026 to present. Deputy Coordinator, Aug 2025 to Jul 2026.</li>
+          <li><strong>Teaching Assistant</strong>, Data Science: Theory and Practice, IIT Madras, Jan – May 2026.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="about" id="about" aria-labelledby="about-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="kicker">Education, skills and certifications</p>
+        <h2 id="about-title">About</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="lead">I'm an AI engineer who builds generative AI applications end to end, from retrieval pipelines and LLM agents to the APIs, cloud infrastructure and monitoring behind them.</p>
+          <p>I'm doing an M.S. in Engineering Design at IIT Madras, where my research on graph neural networks for understanding CAD assemblies was published in <em>Computers &amp; Graphics</em>. Before that I did a B.Tech in mechanical engineering and robotics.</p>
+          <p>Recently I've built GenAI screening and hiring agents at ORIGINN and fine-tuned a Phi-family model with LoRA at Indobase. I also completed the 3D Vision Summer School (3DVSS) 2026, and I hold the AWS Certified AI Practitioner and AWS Certified Cloud Practitioner certifications.</p>
+          <ul class="edu" aria-label="Education">
+            <li><b>M.S., Engineering Design</b><span>Indian Institute of Technology Madras</span><span class="score">CGPA 8.66/10<br>2024 to present</span></li>
+            <li><b>B.Tech., Mechanical Engineering + Robotics</b><span>DCR University of Science &amp; Technology, Murthal</span><span class="score">CGPA 8.05/10<br>2020–24</span></li>
+          </ul>
+          <p class="course"><span class="kicker">Coursework</span>Foundation of Machine Learning&nbsp;· Introduction to Deep Learning&nbsp;· Data Science: Theory and Practice&nbsp;· MLOps</p>
+        </div>
+        <dl class="skills" aria-label="Skills">
+          <div><dt>AI</dt><dd>Large language models, prompt engineering and evaluation, RAG, hybrid and dense retrieval, embeddings, LangGraph, multi-agent systems, LoRA, PEFT, TRL SFTTrainer, Ollama, GGUF</dd></div>
+          <div><dt>Machine learning</dt><dd>PyTorch, scikit-learn, XGBoost, Hugging Face Transformers, graph neural networks, CNNs, ResNet, vision transformers, sequence models, attention, feature engineering, model evaluation</dd></div>
+          <div><dt>Deployment and MLOps</dt><dd>Docker, Kubernetes, AWS, GitHub Actions, Git, Linux, MLflow, DVC, Apache Airflow</dd></div>
+          <div><dt>Monitoring and data</dt><dd>Prometheus, Grafana, AlertManager, Redis Streams, ClickHouse, SHAP, Weights &amp; Biases</dd></div>
+          <div><dt>Backend and full stack</dt><dd>APIs, Node.js, Express, React, Next.js, Postgres, MongoDB, Prisma, Redis</dd></div>
+          <div><dt>Programming</dt><dd>Python, SQL, TypeScript, JavaScript, Bash</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="contact" id="contact" aria-labelledby="contact-title">
+  <div class="wrap">
+    <p class="kicker">Contact</p>
+    <h2 id="contact-title">Get in touch</h2>
+    <div class="email-row">
+      <a class="email" id="email" href="mailto:abhisheksindhu5@gmail.com">abhisheksindhu5@gmail.com</a>
+      <button id="copy-email" class="copy-btn" type="button">Copy email</button>
+      <span id="copy-status" class="copy-status" role="status"></span>
+    </div>
+    <ul class="socials">
+      <li><a href="https://www.linkedin.com/in/mohit-kumar-sindhu">LinkedIn ↗</a></li>
+      <li><a href="https://github.com/MK-Sindhu">GitHub ↗</a></li>
+      <li><a href="https://x.com/MKSindhu4">X (Twitter) ↗</a></li>
+    </ul>
+    <div class="foot"><span>© 2026 Mohit Kumar</span><span>Chennai · IIT Madras</span></div>
+  </div>
+  <figure class="contact-shot">
+    <img src="images/contact.jpg" alt="Black-and-white portrait of Mohit Kumar in dark wraparound sunglasses and a black jacket" width="880" height="1168" loading="lazy">
+  </figure>
+</footer>
+
+<script>
+(function () {
+  var btn = document.getElementById('copy-email');
+  var email = document.getElementById('email');
+  var status = document.getElementById('copy-status');
+  function selectEmail() {
+    var range = document.createRange();
+    range.selectNodeContents(email);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    status.textContent = 'Selected. Press Ctrl+C or ⌘C to copy.';
+  }
+  btn.addEventListener('click', function () {
+    var text = email.textContent.trim();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { status.textContent = 'Copied'; }, selectEmail);
+    } else {
+      selectEmail();
+    }
+  });
+})();
+</script>
+</body>
+</html>

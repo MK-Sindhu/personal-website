@@ -1,0 +1,9 @@
+# Only the website is published: the page and the two images it uses.
+# Everything else here (resume, references, original photos, prompts, notes) stays local.
+/*
+!/.gitignore
+!/index.html
+!/images/
+/images/*
+!/images/hero.jpg
+!/images/contact.jpg
