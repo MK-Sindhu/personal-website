@@ -21,13 +21,14 @@ assets/
     tokens.css              colours, fonts and layout variables
     base.css                reset, film grain, links, focus styles, shared type
     hero.css                nav, name, portrait animation, call-to-action buttons
-    work.css                projects section and its holographic panels
+    work.css                projects section: the card wheel and the glass project panels
     experience.css          internship timeline and leadership list
     about.css               bio, education, skills, certification badges
     contact.css             closing contact band
   js/
     in-page-links.js        smooth scrolling for in-page links, without changing the URL
     copy-email.js           "Copy email" button
+    project-wheel.js        builds the projects wheel from the project panels
   images/
     portraits/              hero and contact portraits (880 × 1168)
     badges/                 certification badges
@@ -38,7 +39,7 @@ The stylesheets are loaded in the order above, which is also their cascade order
 
 ## Editing
 
-- **Text and projects** are in `index.html`, one `<section>` per part of the page. To add a project, copy one of the `<article class="holo">` cards in `#work`. Its diagram is an inline SVG that uses the `.viz` classes from `work.css`.
+- **Text and projects** are in `index.html`, one `<section>` per part of the page. To add a project, copy one of the `<article class="holo proj">` panels in `#work` and give it a card colour with `data-theme` (`silver`, `ink`, `orange` or `violet`). Its diagram is an inline SVG that uses the `.viz` classes from `work.css`. The wheel builds each card from its panel (number, category, title and diagram), and without JavaScript the panels show as a grid.
 - **Colours and fonts** are set in `assets/css/tokens.css`.
 - **Scripts** are classic `defer` scripts, not ES modules, so the page still works when opened straight from the file system.
 

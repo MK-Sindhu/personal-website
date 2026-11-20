@@ -1,5 +1,7 @@
 /*
-  Work: the projects section, its holographic glass panels (.holo) and their inline SVG diagrams (.viz).
+  Work: the projects section, its holographic glass panels (.holo), their inline SVG diagrams (.viz),
+  and the projects wheel that assets/js/project-wheel.js builds from them. Without JavaScript the
+  panels stay a plain grid.
 */
 
 .work{position:relative;overflow:clip;padding-block:clamp(4.5rem,10vw,8rem) clamp(3.5rem,7vw,5rem);
@@ -48,24 +50,91 @@
 .links a:hover{color:var(--cyan)}
 .viz{margin:-.25rem 0 .35rem;padding:.75rem .5rem .25rem;border-radius:12px;background:linear-gradient(to bottom,rgba(110,231,234,.06),transparent)}
 .viz svg{display:block;width:100%;height:auto;overflow:visible;filter:drop-shadow(0 0 4px rgba(110,231,234,.55))}
-.viz .s{fill:none;stroke:var(--cyan);stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
-.viz .v{fill:none;stroke:var(--violet);stroke-width:1.3}
+.viz .s{fill:none;stroke:var(--viz-line,var(--cyan));stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+.viz .v{fill:none;stroke:var(--viz-alt,var(--violet));stroke-width:1.3}
 .viz .d{stroke-dasharray:4 4}
-.viz .f{fill:var(--cyan)}
-.viz .fv{fill:var(--violet)}
-.viz .fa{fill:var(--amber)}
+.viz .f{fill:var(--viz-line,var(--cyan))}
+.viz .fv{fill:var(--viz-alt,var(--violet))}
+.viz .fa{fill:var(--viz-accent,var(--amber))}
 .viz text{font-family:var(--f-mono);font-size:9px;fill:var(--bone-2);letter-spacing:.02em}
 .viz text.c{text-anchor:middle}
 .viz text.e{text-anchor:end}
 
-.feature{display:grid;grid-template-columns:1fr;gap:1.5rem 3rem;margin-bottom:clamp(2.5rem,5vw,3.5rem)}
-.feature .viz{margin:0;align-self:center}
-@media (min-width:900px){ .feature{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center} .feature .viz{grid-column:2;grid-row:1 / span 7} }
-.feature h3{font-size:clamp(2.2rem,5vw,3.6rem)}
-
-.grid{display:grid;grid-template-columns:1fr;gap:clamp(2.25rem,4vw,3rem) clamp(1.5rem,3vw,2.25rem)}
+/* Without JavaScript: a grid, with the research paper across the top */
+.projects{display:grid;grid-template-columns:1fr;gap:clamp(2.25rem,4vw,3rem) clamp(1.5rem,3vw,2.25rem)}
 @media (min-width:820px){
-  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .grid > .holo:nth-child(odd){--ry:5deg}
-  .grid > .holo:nth-child(even){--ry:-5deg}
+  .projects{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .projects > .proj:first-child{grid-column:1 / -1}
+  .projects > .proj:nth-child(even){--ry:5deg}
+  .projects > .proj:nth-child(odd):not(:first-child){--ry:-5deg}
 }
+
+/* ───────── Projects wheel ─────────
+   Cards sit evenly round a circle whose centre (the hub) is near the bottom of the stage.
+   The script sets --n (number of cards), --i on each card and --turn (whole steps turned so far);
+   everything else is sized from the card width. */
+.carousel{--step:calc(360deg / var(--n,7));--turn:0;
+  --cw:clamp(200px,24vw,300px);                  /* card width */
+  --ch:calc(var(--cw) * 4 / 3);                  /* card height, 3:4 */
+  --hub:calc(var(--cw) * .5);                    /* hub radius */
+  --rb:calc(var(--hub) + var(--cw) * .07);       /* hub centre to the bottom edge of each card */
+  --below:calc(var(--cw) * .16);                 /* stage shown below the hub centre */
+  --above:calc(var(--cw) * .1)}                  /* room above the front card */
+.stage{position:relative;height:calc(var(--above) + var(--rb) + var(--ch) + var(--below));
+  margin-inline:calc(var(--gut) * -1);overflow:hidden;touch-action:pan-y;
+  -webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - var(--below) - 1rem),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - var(--below) - 1rem),transparent);-webkit-user-select:none;user-select:none;cursor:grab}
+.stage:active{cursor:grabbing}
+.wheel{position:absolute;inset:0;transform-origin:50% calc(100% - var(--below));
+  transform:rotate(calc(var(--turn) * var(--step) * -1));transition:transform .9s cubic-bezier(.2,.75,.15,1)}
+
+.ring{position:absolute;left:calc(50% - var(--hub));bottom:calc(var(--below) - var(--hub));width:calc(var(--hub) * 2);height:calc(var(--hub) * 2);
+  border-radius:50%;background:radial-gradient(closest-side,rgba(238,232,221,.07),rgba(238,232,221,.025) 85%,transparent)}
+.ring svg{display:block;width:100%;height:100%;overflow:visible}
+.ring circle{fill:none;stroke:rgba(238,232,221,.24);stroke-width:.6;stroke-dasharray:2 3}
+.ring text{font-family:var(--f-mono);font-size:8px;letter-spacing:.1em;fill:var(--mute)}
+.hub-mark{position:absolute;left:50%;bottom:calc(var(--below) + var(--hub) * .3);transform:translateX(-50%);pointer-events:none;
+  display:flex;flex-direction:column;align-items:center;gap:.3rem;
+  font-family:var(--f-mono);font-stretch:87.5%;font-size:.75rem;letter-spacing:.08em;color:var(--bone-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.hub-arrow{color:var(--amber);font-size:.65rem;line-height:1}
+
+.card{position:absolute;left:calc(50% - var(--cw) / 2);bottom:calc(var(--below) + var(--rb));width:var(--cw);height:var(--ch);
+  transform-origin:50% calc(100% + var(--rb));transform:rotate(calc(var(--i) * var(--step)));
+  display:flex;flex-direction:column;gap:calc(var(--cw) * .04);padding:calc(var(--cw) * .075);border-radius:calc(var(--cw) * .075);
+  background:var(--card-bg);color:var(--card-ink);cursor:pointer;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),0 calc(var(--cw) * .09) calc(var(--cw) * .18) calc(var(--cw) * -.05) rgba(0,0,0,.8);
+  filter:brightness(.68) saturate(.85);transition:filter .6s ease}
+.card.is-active{filter:none;cursor:inherit}
+.card-top{display:flex;justify-content:space-between;gap:1em;font-family:var(--f-mono);font-stretch:87.5%;font-size:max(9px,calc(var(--cw) * .036));
+  letter-spacing:.08em;text-transform:uppercase;opacity:.75;font-variant-numeric:tabular-nums}
+.card-art{flex:1;min-height:0;display:grid;place-items:center}
+.card-art .viz{width:100%;margin:0;padding:0;background:none}
+.card-art .viz svg{filter:var(--card-glow)}
+.card-art .viz text{display:none}                /* labels are too small to read at card size; the panel below has the words */
+.card-art .viz .s,.card-art .viz .v{stroke-width:1.8}
+.card-title{font-family:var(--f-display);font-stretch:62%;font-weight:850;text-transform:uppercase;
+  font-size:calc(var(--cw) * .125);line-height:.88;letter-spacing:-.005em;overflow-wrap:anywhere}
+
+/* Card colours, from the site palette */
+.card[data-theme="ink"]{--card-bg:radial-gradient(120% 70% at 50% 38%,rgba(110,231,234,.14),transparent 65%),#0C0D0E;--card-ink:var(--bone);
+  --card-glow:drop-shadow(0 0 4px rgba(110,231,234,.55))}
+.card[data-theme="violet"]{--card-bg:radial-gradient(120% 70% at 50% 38%,rgba(168,147,255,.3),transparent 65%),#16122A;--card-ink:var(--bone);
+  --viz-line:#CFC5FF;--viz-alt:var(--cyan);--card-glow:drop-shadow(0 0 4px rgba(168,147,255,.6))}
+.card[data-theme="orange"]{--card-bg:var(--orange);--card-ink:#170902;--viz-line:#170902;--viz-alt:#5E2205;--viz-accent:#FFF1E2;--card-glow:none}
+.card[data-theme="silver"]{--card-bg:linear-gradient(170deg,#DCDCDD,#BBBCBD);--card-ink:var(--ink);--viz-line:var(--ink);--viz-alt:#5C6166;--viz-accent:var(--orange);--card-glow:none}
+
+.wheel-controls{display:flex;align-items:center;justify-content:center;gap:.75rem;margin-top:1rem}
+.wheel-btn{display:grid;place-items:center;width:2.75rem;height:2.75rem;border:0;border-radius:50%;cursor:pointer;
+  background:rgba(238,232,221,.08);color:var(--bone);font:600 1.15rem/1 var(--f-body);box-shadow:inset 0 0 0 1px rgba(238,232,221,.24);transition:background-color .2s ease}
+.wheel-btn:hover{background:rgba(238,232,221,.16)}
+.wheel-hint{margin-inline:.5rem;font-family:var(--f-mono);font-stretch:87.5%;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);text-align:center}
+
+/* The front project's details, under the wheel */
+.carousel .projects{display:block;max-width:46rem;margin:clamp(1.5rem,4vw,2.5rem) auto 0}
+.carousel .projects > .proj{--ry:0deg}
+.carousel .proj:not(.is-active){display:none}
+.carousel .proj .viz{display:none}
+@media (prefers-reduced-motion: no-preference){
+  .carousel .proj.is-active{animation:proj-in .5s ease both}
+  @keyframes proj-in{from{opacity:0}}
+}
+@media (prefers-reduced-motion: reduce){ .wheel,.card{transition:none} }

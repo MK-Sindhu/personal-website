@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="assets/css/contact.css">
 <script src="assets/js/in-page-links.js" defer></script>
 <script src="assets/js/copy-email.js" defer></script>
+<script src="assets/js/project-wheel.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#work">Skip to projects</a>
@@ -67,40 +68,40 @@
         <h2 id="work-title">Selected work</h2>
       </div>
 
-      <article class="holo feature" aria-labelledby="slot-title">
-        <div class="viz">
-          <svg viewBox="0 0 520 190" role="img" aria-label="Diagram: an assembly graph with one missing part is matched against a ranked library of 234,299 parts; the median rank of the correct part is 5.">
-            <path class="s" d="M48 62 L112 34 L178 70 L120 112 L48 62 M112 34 L120 112 M178 70 L190 136 M120 112 L64 150"/>
-            <path class="s d" d="M120 112 L190 136"/>
-            <circle class="f" cx="48" cy="62" r="6"/><circle class="f" cx="112" cy="34" r="6"/><circle class="f" cx="178" cy="70" r="6"/>
-            <circle class="f" cx="120" cy="112" r="6"/><circle class="f" cx="64" cy="150" r="6"/>
-            <circle class="v d" cx="190" cy="136" r="10"/><text class="c" x="190" y="139.5">?</text>
-            <text x="20" y="182">assembly graph · edges = mate constraints</text>
-            <path class="s" d="M222 92 H282 M276 86 L282 92 L276 98"/>
-            <text class="c" x="252" y="82">retrieve</text>
-            <text x="300" y="20">library · 234,299 parts</text>
-            <g>
-              <text class="e" x="320" y="42">#1</text><rect class="s" x="328" y="34" width="168" height="10" rx="3"/>
-              <text class="e" x="320" y="62">#2</text><rect class="s" x="328" y="54" width="156" height="10" rx="3"/>
-              <text class="e" x="320" y="82">#3</text><rect class="s" x="328" y="74" width="144" height="10" rx="3"/>
-              <text class="e" x="320" y="102">#4</text><rect class="s" x="328" y="94" width="132" height="10" rx="3"/>
-              <text class="e" x="320" y="122">#5</text><rect class="fa" x="328" y="114" width="120" height="10" rx="3"/>
-              <text class="e" x="320" y="142">#6</text><rect class="s" x="328" y="134" width="108" height="10" rx="3"/>
-              <text class="e" x="320" y="162">⋮</text>
-              <text x="456" y="122.5">median</text>
-            </g>
-          </svg>
-        </div>
-        <p class="kicker">Research · Computers &amp; Graphics, 3DOR 2026 special section</p>
-        <h3 id="slot-title">SLOT-GNN<small>A hierarchical graph neural network for finding the missing part in a CAD assembly</small></h3>
-        <p class="result">Median rank 5 of 234,299 parts · 35% better than the strongest baseline</p>
-        <p class="desc">Given an assembly with a part missing, SLOT-GNN retrieves the right part from a library of 234,299. It encodes each part's boundary representation as a graph and passes edge-conditioned messages over the assembly's mate constraints.</p>
-        <ul class="stack" aria-label="Methods"><li>Graph neural networks</li><li>B-rep encoder</li><li>Message passing</li><li>Retrieval</li></ul>
-        <p class="links"><a href="https://www.sciencedirect.com/science/article/pii/S0097849326001573">Read the paper ↗</a></p>
-      </article>
+      <div class="projects" data-wheel>
+        <article class="holo proj" data-theme="silver" aria-labelledby="slot-title">
+          <div class="viz">
+            <svg viewBox="0 0 520 190" role="img" aria-label="Diagram: an assembly graph with one missing part is matched against a ranked library of 234,299 parts; the median rank of the correct part is 5.">
+              <path class="s" d="M48 62 L112 34 L178 70 L120 112 L48 62 M112 34 L120 112 M178 70 L190 136 M120 112 L64 150"/>
+              <path class="s d" d="M120 112 L190 136"/>
+              <circle class="f" cx="48" cy="62" r="6"/><circle class="f" cx="112" cy="34" r="6"/><circle class="f" cx="178" cy="70" r="6"/>
+              <circle class="f" cx="120" cy="112" r="6"/><circle class="f" cx="64" cy="150" r="6"/>
+              <circle class="v d" cx="190" cy="136" r="10"/><text class="c" x="190" y="139.5">?</text>
+              <text x="20" y="182">assembly graph · edges = mate constraints</text>
+              <path class="s" d="M222 92 H282 M276 86 L282 92 L276 98"/>
+              <text class="c" x="252" y="82">retrieve</text>
+              <text x="300" y="20">library · 234,299 parts</text>
+              <g>
+                <text class="e" x="320" y="42">#1</text><rect class="s" x="328" y="34" width="168" height="10" rx="3"/>
+                <text class="e" x="320" y="62">#2</text><rect class="s" x="328" y="54" width="156" height="10" rx="3"/>
+                <text class="e" x="320" y="82">#3</text><rect class="s" x="328" y="74" width="144" height="10" rx="3"/>
+                <text class="e" x="320" y="102">#4</text><rect class="s" x="328" y="94" width="132" height="10" rx="3"/>
+                <text class="e" x="320" y="122">#5</text><rect class="fa" x="328" y="114" width="120" height="10" rx="3"/>
+                <text class="e" x="320" y="142">#6</text><rect class="s" x="328" y="134" width="108" height="10" rx="3"/>
+                <text class="e" x="320" y="162">⋮</text>
+                <text x="456" y="122.5">median</text>
+              </g>
+            </svg>
+          </div>
+          <p class="kicker">Research · Computers &amp; Graphics, 3DOR 2026 special section</p>
+          <h3 id="slot-title">SLOT-GNN<small>A hierarchical graph neural network for finding the missing part in a CAD assembly</small></h3>
+          <p class="result">Median rank 5 of 234,299 parts · 35% better than the strongest baseline</p>
+          <p class="desc">Given an assembly with a part missing, SLOT-GNN retrieves the right part from a library of 234,299. It encodes each part's boundary representation as a graph and passes edge-conditioned messages over the assembly's mate constraints.</p>
+          <ul class="stack" aria-label="Methods"><li>Graph neural networks</li><li>B-rep encoder</li><li>Message passing</li><li>Retrieval</li></ul>
+          <p class="links"><a href="https://www.sciencedirect.com/science/article/pii/S0097849326001573">Read the paper ↗</a></p>
+        </article>
 
-      <div class="grid">
-        <article class="holo" aria-labelledby="arch-title">
+        <article class="holo proj" data-theme="ink" aria-labelledby="arch-title">
           <div class="viz">
             <svg viewBox="0 0 320 120" role="img" aria-label="Diagram: a dig down through four layers, from the code to the commit that changed it, its pull request and the issue behind it. The answer cites each find.">
               <text x="2" y="20">code</text><text x="2" y="46">commit</text><text x="2" y="72">PR · goal</text><text x="2" y="98">issue · need</text>
@@ -122,7 +123,7 @@
           <p class="links"><a href="https://repo-archaeologist.vercel.app">Watch a recorded run ↗</a><a href="https://github.com/MK-Sindhu/repo-archaeologist">View code on GitHub ↗</a></p>
         </article>
 
-        <article class="holo" aria-labelledby="obligraph-title">
+        <article class="holo proj" data-theme="orange" aria-labelledby="obligraph-title">
           <div class="viz">
             <svg viewBox="0 0 320 120" role="img" aria-label="Diagram: a regulator's circular is split into checkable requirements, linked in a graph of what amends or supersedes what, and gaps against an organisation's policies become dated tasks on a calendar.">
               <text x="8" y="16">RBI · SEBI</text>
@@ -157,7 +158,7 @@
           <p class="links"><a href="https://obligraph-web.vercel.app">Try the live demo ↗</a><a href="https://github.com/MK-Sindhu/obligraph">View code on GitHub ↗</a></p>
         </article>
 
-        <article class="holo" aria-labelledby="ndstill-title">
+        <article class="holo proj" data-theme="violet" aria-labelledby="ndstill-title">
           <div class="viz">
             <svg viewBox="0 0 320 120" role="img" aria-label="Diagram: an agent's transfer passes nine checks, then either goes out from the business's own bank account or is held for a person to approve.">
               <rect class="v" x="2" y="42" width="70" height="32" rx="16"/>
@@ -184,7 +185,7 @@
           <p class="links"><a href="https://www.ndstill.com">Visit ndstill.com ↗</a></p>
         </article>
 
-        <article class="holo" aria-labelledby="builder-title">
+        <article class="holo proj" data-theme="silver" aria-labelledby="builder-title">
           <div class="viz">
             <svg viewBox="0 0 320 120" role="img" aria-label="Diagram: a text prompt becomes a running web app with its own preview URL, served by an autoscaled worker.">
               <rect class="s" x="10" y="40" width="96" height="34" rx="17"/>
@@ -209,7 +210,7 @@
           <p class="links"><a href="https://github.com/MK-Sindhu/ai-app-builder">View code on GitHub ↗</a></p>
         </article>
 
-        <article class="holo" aria-labelledby="fraud-title">
+        <article class="holo proj" data-theme="ink" aria-labelledby="fraud-title">
           <div class="viz">
             <svg viewBox="0 0 320 120" role="img" aria-label="Diagram: data, training, registry and serving stages in a loop, where detected drift triggers retraining.">
               <rect class="s" x="6" y="30" width="64" height="32" rx="6"/><text class="c" x="38" y="44">data</text><text class="c" x="38" y="55">DVC</text>
@@ -230,7 +231,7 @@
           <p class="links"><a href="https://github.com/MK-Sindhu/mlops_E2E">View code on GitHub ↗</a></p>
         </article>
 
-        <article class="holo" aria-labelledby="uptime-title">
+        <article class="holo proj" data-theme="orange" aria-labelledby="uptime-title">
           <div class="viz">
             <svg viewBox="0 0 320 120" role="img" aria-label="Diagram: regional workers check websites every 30 seconds and send results through Redis Streams into ClickHouse, which feeds a dashboard.">
               <circle class="f" cx="22" cy="30" r="4"/><circle class="f" cx="22" cy="58" r="4"/><circle class="f" cx="22" cy="86" r="4"/>
