@@ -1,4 +1,4 @@
-# Only the website is published: the page and the two images it uses.
+# Only the website is published: the page and the images it uses.
 # Everything else here (resume, references, original photos, prompts, notes) stays local.
 /*
 !/.gitignore
@@ -8,3 +8,5 @@
 !/images/hero.jpg
 !/images/contact.jpg
 !/images/aws-*.png
+!/images/icon-*.png
+!/images/apple-touch-icon.png
