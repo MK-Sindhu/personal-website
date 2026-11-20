@@ -45,6 +45,7 @@ a{color:var(--cyan);text-underline-offset:.22em;text-decoration-thickness:1px}
 a:hover{text-decoration-thickness:2px}
 ::selection{background:var(--orange);color:#1A0B03}
 :focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:4px}
+[tabindex="-1"]:focus{outline:none}
 
 /* Film grain over everything; static, so it costs nothing in motion */
 body::after{content:"";position:fixed;inset:0;z-index:100;pointer-events:none;opacity:.11;
@@ -243,13 +244,26 @@ h3{font-family:var(--f-display);font-stretch:75%;font-weight:780;font-size:clamp
 .edu li{display:grid;grid-template-columns:1fr auto;gap:.15rem 1rem;padding-top:1rem;border-top:1px solid rgba(203,213,210,.16)}
 .edu b{font-weight:600;color:var(--bone)}
 .edu span{color:var(--bone-2);grid-column:1}
-.edu .score{grid-column:2;grid-row:1 / span 2;font-family:var(--f-mono);font-stretch:87.5%;font-size:.75rem;line-height:1.7;color:var(--amber);text-align:right;white-space:nowrap}
+.edu .years{grid-column:2;grid-row:1 / span 2;font-family:var(--f-mono);font-stretch:87.5%;font-size:.75rem;line-height:1.7;color:var(--amber);text-align:right;white-space:nowrap}
 .course{display:flex;flex-direction:column;gap:.35rem;margin-top:.4rem;color:var(--bone-2)}
 .skills{display:grid;grid-template-columns:1fr;gap:1.6rem 2.5rem;align-content:start}
 @media (min-width:560px){ .skills{grid-template-columns:repeat(2,minmax(0,1fr))} }
 .skills div{border-top:2px solid rgba(110,231,234,.5);padding-top:.8rem}
 .skills dt{font-family:var(--f-mono);font-stretch:87.5%;font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--cyan);margin-bottom:.4rem}
 .skills dd{color:var(--bone-2);font-size:.98rem}
+.certs{margin-top:clamp(3rem,6vw,4.5rem);padding-top:clamp(2rem,4vw,2.75rem);border-top:1px solid rgba(203,213,210,.16)}
+.certs h3{margin-bottom:1.75rem;font-stretch:62%;text-transform:uppercase;font-weight:850;font-size:clamp(1.9rem,4vw,2.75rem)}
+.cert-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr));gap:2rem 3rem;max-width:52rem}
+.cert-list li{display:flex;align-items:center;gap:1.4rem}
+/* the official badges, cut out like stickers: a white die-cut edge, a slight tilt and a drop shadow */
+.sticker{flex:none;width:clamp(5.5rem,14vw,7.5rem);height:auto;transform:rotate(var(--tilt,-5deg));
+  filter:drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff) drop-shadow(0 12px 16px rgba(0,0,0,.55));
+  transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.cert-list li:nth-child(2) .sticker{--tilt:4deg}
+.cert-list li:hover .sticker{transform:rotate(0) scale(1.04)}
+@media (prefers-reduced-motion: reduce){ .sticker{transition:none} }
+.cert-list b{display:block;font-family:var(--f-display);font-stretch:85%;font-weight:700;font-size:clamp(1.2rem,2vw,1.4rem);line-height:1.15;color:var(--bone)}
+.cert-list span{display:block;margin-top:.4rem;font-family:var(--f-mono);font-stretch:87.5%;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
 
 /* ───────── Contact ───────── */
 .contact{
@@ -532,10 +546,10 @@ h3{font-family:var(--f-display);font-stretch:75%;font-weight:780;font-size:clamp
         <div class="about-text">
           <p class="lead">I'm an AI engineer who builds generative AI applications end to end, from retrieval pipelines and LLM agents to the APIs, cloud infrastructure and monitoring behind them.</p>
           <p>I'm doing an M.S. in Engineering Design at IIT Madras, where my research on graph neural networks for understanding CAD assemblies was published in <em>Computers &amp; Graphics</em>. Before that I did a B.Tech in mechanical engineering and robotics.</p>
-          <p>Recently I've built GenAI screening and hiring agents at ORIGINN and fine-tuned a Phi-family model with LoRA at Indobase. I also completed the 3D Vision Summer School (3DVSS) 2026, and I hold the AWS Certified AI Practitioner and AWS Certified Cloud Practitioner certifications.</p>
+          <p>Recently I've built GenAI screening and hiring agents at ORIGINN and fine-tuned a Phi-family model with LoRA at Indobase. I also completed the 3D Vision Summer School (3DVSS) 2026.</p>
           <ul class="edu" aria-label="Education">
-            <li><b>M.S., Engineering Design</b><span>Indian Institute of Technology Madras</span><span class="score">CGPA 8.66/10<br>2024 to present</span></li>
-            <li><b>B.Tech., Mechanical Engineering + Robotics</b><span>DCR University of Science &amp; Technology, Murthal</span><span class="score">CGPA 8.05/10<br>2020–24</span></li>
+            <li><b>M.S., Engineering Design</b><span>Indian Institute of Technology Madras</span><span class="years">2024 to present</span></li>
+            <li><b>B.Tech., Mechanical Engineering + Robotics</b><span>DCR University of Science &amp; Technology, Murthal</span><span class="years">2020–24</span></li>
           </ul>
           <p class="course"><span class="kicker">Coursework</span>Foundation of Machine Learning&nbsp;· Introduction to Deep Learning&nbsp;· Data Science: Theory and Practice&nbsp;· MLOps</p>
         </div>
@@ -547,6 +561,19 @@ h3{font-family:var(--f-display);font-stretch:75%;font-weight:780;font-size:clamp
           <div><dt>Backend and full stack</dt><dd>APIs, Node.js, Express, React, Next.js, Postgres, MongoDB, Prisma, Redis</dd></div>
           <div><dt>Programming</dt><dd>Python, SQL, TypeScript, JavaScript, Bash</dd></div>
         </dl>
+      </div>
+      <div class="certs">
+        <h3>Certifications</h3>
+        <ul class="cert-list">
+          <li>
+            <img class="sticker" src="images/aws-ai-practitioner.png" alt="" width="260" height="300" loading="lazy">
+            <p><b>AWS Certified AI Practitioner</b><span>Amazon Web Services · Foundational</span></p>
+          </li>
+          <li>
+            <img class="sticker" src="images/aws-cloud-practitioner.png" alt="" width="260" height="300" loading="lazy">
+            <p><b>AWS Certified Cloud Practitioner</b><span>Amazon Web Services · Foundational</span></p>
+          </li>
+        </ul>
       </div>
     </div>
   </section>
@@ -569,11 +596,30 @@ h3{font-family:var(--f-display);font-stretch:75%;font-weight:780;font-size:clamp
     <div class="foot"><span>© 2026 Mohit Kumar</span><span>Chennai · IIT Madras</span></div>
   </div>
   <figure class="contact-shot">
-    <img src="images/contact.jpg" alt="Black-and-white portrait of Mohit Kumar in dark wraparound sunglasses and a black jacket" width="880" height="1168" loading="lazy">
+    <img src="images/contact.jpg" alt="Black-and-white portrait of Mohit Kumar in sunglasses and a black jacket" width="880" height="1168" loading="lazy">
   </figure>
 </footer>
 
 <script>
+// Menu and in-page links scroll to their section without adding "#section" to the address bar
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  document.addEventListener('click', function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var link = e.target.closest('a[href^="#"]');
+    if (!link) return;
+    var target = document.getElementById(link.getAttribute('href').slice(1));
+    if (!target) return;
+    e.preventDefault();
+    var behavior = reduce.matches ? 'auto' : 'smooth';
+    if (target.id === 'top') window.scrollTo({ top: 0, behavior: behavior });
+    else target.scrollIntoView({ behavior: behavior, block: 'start' });
+    // move keyboard and screen-reader focus to the section as well
+    if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+    target.focus({ preventScroll: true });
+  });
+})();
+
 (function () {
   var btn = document.getElementById('copy-email');
   var email = document.getElementById('email');
