@@ -1,0 +1,35 @@
+/*
+  Contact: closing band with email, copy button, social links and the second portrait.
+*/
+
+.contact{
+  --ch:clamp(36rem,56vw,48rem);                      /* portrait height */
+  --h2:clamp(3.4rem,9vw,8rem);
+  --cw:calc(var(--ch) * .7534);                      /* contact.jpg is 880 × 1168 */
+  --focus:var(--ink);
+  position:relative;overflow:hidden;isolation:isolate;background:var(--paper);color:var(--ink);min-height:var(--ch)}
+.contact-shot{position:absolute;z-index:0;right:0;bottom:0;margin:0;height:var(--ch);width:var(--cw)}
+.contact-shot img{width:100%;height:100%;max-width:none;object-fit:cover;
+  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 14%);mask-image:linear-gradient(to right,transparent 0,#000 14%)}
+.contact .wrap{position:relative;z-index:2;max-width:none;min-height:var(--ch);display:flex;flex-direction:column;gap:1.6rem;
+  /* top padding lines the heading up with his sunglasses, 41.3% down the photo */
+  padding:max(3rem,calc(var(--ch) * .413 - 2.8rem - var(--h2) * .37)) calc(var(--cw) + 1.5rem) 2rem max(var(--gut),calc((100vw - var(--wrap)) / 2 + var(--gut)))}
+.contact .kicker{color:var(--ink-2)}
+.contact h2{font-size:var(--h2);color:var(--ink)}
+.email-row{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem 1rem;margin-top:.5rem}
+.email{font-family:var(--f-mono);font-stretch:87.5%;font-size:clamp(.95rem,2.2vw,1.35rem);color:var(--ink);word-break:break-all}
+.copy-btn{font:600 .95rem var(--f-body);background:var(--ink);color:var(--paper);border:0;border-radius:999px;padding:.6rem 1.1rem;cursor:pointer}
+.copy-btn:hover{background:#2A2D30}
+.copy-status{font-family:var(--f-mono);font-stretch:87.5%;font-size:.75rem;color:var(--ink-2);min-height:1.2em}
+.socials{display:flex;flex-wrap:wrap;gap:.75rem 2rem}
+.socials a{color:var(--ink);font-weight:600;font-size:1.1rem;text-decoration-thickness:2px}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem 2rem;margin-top:auto;padding-top:1.25rem;border-top:1px solid rgba(13,14,15,.18);font-family:var(--f-mono);font-stretch:87.5%;font-size:.72rem;color:var(--ink-2)}
+
+/* Phone and narrow tablet: words first, then the portrait closes the page */
+@media (max-width:759px){
+  .contact{min-height:0}
+  .contact .wrap{min-height:0;padding:clamp(3.5rem,12vw,5rem) var(--gut) 2rem}
+  .foot{margin-top:1.5rem}
+  .contact-shot{position:relative;right:auto;bottom:auto;width:100%;height:auto;aspect-ratio:880 / 1168}
+  .contact-shot img{-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 6%);mask-image:linear-gradient(to bottom,transparent 0,#000 6%)}
+}

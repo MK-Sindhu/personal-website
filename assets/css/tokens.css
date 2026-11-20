@@ -1,0 +1,24 @@
+/*
+  Design tokens: colour, type and layout variables used by every other stylesheet.
+
+  Direction: two high-key black-and-white portraits bookend a dark middle.
+  The hero is silver studio grey, with the amber visor as the only colour; on load the colour
+  sweeps across the visor and out along its light trail. The black jacket at the bottom of the
+  photo runs straight into the near-black page, where the projects float as glassy holographic
+  panels. Contact closes on bright paper with a second black-and-white portrait.
+*/
+
+:root{
+  --silver:#B9B9BA; --paper:#F0F0F0; --ink:#0D0E0F; --ink-2:#34373A;
+  --jacket:#050506; --deep:#0A0B0C; --deep-2:#101213;
+  --bone:#EEE8DD; --bone-2:#C9CCCC; --mute:#9DA3A4;
+  --amber:#FFB43A; --orange:#FF6A1F;
+  --cyan:#6EE7EA; --violet:#A893FF;
+  --focus:var(--amber);
+  --f-display:"Anybody","Arial Narrow",Impact,sans-serif;
+  --f-body:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif;
+  --f-mono:"Martian Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --wrap:76rem;
+  --gut:clamp(16px,4vw,48px);
+  color-scheme:dark;
+}

@@ -1,0 +1,22 @@
+/*
+  Experience: the internship timeline and the leadership list.
+*/
+
+.exp{padding-block:clamp(3rem,6vw,4.5rem) clamp(3.5rem,7vw,5rem);background:linear-gradient(to bottom,var(--deep),var(--deep-2))}
+.timeline > li{display:grid;grid-template-columns:1fr;gap:.5rem 3rem;padding-block:1.75rem;border-top:1px solid rgba(203,213,210,.16)}
+.timeline > li:last-child{border-bottom:1px solid rgba(203,213,210,.16)}
+@media (min-width:820px){ .timeline > li{grid-template-columns:12rem minmax(0,1fr)} }
+.when{font-family:var(--f-mono);font-stretch:87.5%;font-size:.78rem;color:var(--amber);padding-top:.35rem;font-variant-numeric:tabular-nums}
+.role{display:flex;flex-direction:column;gap:.35rem}
+.role h3{font-size:clamp(1.5rem,2.6vw,1.9rem)}
+.org{color:var(--bone-2)}
+.points{margin-top:.7rem;display:flex;flex-direction:column;gap:.55rem;max-width:68ch}
+.points li{position:relative;padding-left:1.4rem;color:var(--bone-2)}
+.points li::before{content:"";position:absolute;left:0;top:.72em;width:.8rem;height:2px;background:linear-gradient(to right,transparent,var(--orange))}
+.also{margin-top:clamp(3rem,6vw,4.5rem)}
+.also h3{margin-bottom:1.25rem;font-stretch:62%;text-transform:uppercase;font-weight:850;font-size:clamp(1.9rem,4vw,2.75rem)}
+.also ul{display:grid;grid-template-columns:1fr;gap:1rem 3rem}
+@media (min-width:820px){ .also ul{grid-template-columns:repeat(2,minmax(0,1fr))} }
+.also li{color:var(--bone-2);padding-left:1.4rem;position:relative}
+.also li::before{content:"";position:absolute;left:0;top:.72em;width:.8rem;height:2px;background:linear-gradient(to right,transparent,var(--cyan))}
+.also strong{color:var(--bone);font-weight:600}

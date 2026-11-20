@@ -1,0 +1,34 @@
+/*
+  About: bio, education, skills and certification badges.
+*/
+
+.about{padding-block:clamp(3rem,6vw,4.5rem) clamp(4rem,8vw,6rem);background:var(--deep-2)}
+.about-grid{display:grid;grid-template-columns:1fr;gap:3rem 4rem}
+@media (min-width:960px){ .about-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)} }
+.about-text{display:flex;flex-direction:column;gap:1.2rem}
+.about-text .lead{font-family:var(--f-display);font-stretch:85%;font-weight:600;font-size:clamp(1.45rem,2.6vw,1.95rem);line-height:1.2;color:var(--bone)}
+.about-text p:not(.lead){color:var(--bone-2);max-width:60ch}
+.edu{display:flex;flex-direction:column;gap:1.1rem;margin-top:1rem}
+.edu li{display:grid;grid-template-columns:1fr auto;gap:.15rem 1rem;padding-top:1rem;border-top:1px solid rgba(203,213,210,.16)}
+.edu b{font-weight:600;color:var(--bone)}
+.edu span{color:var(--bone-2);grid-column:1}
+.edu .years{grid-column:2;grid-row:1 / span 2;font-family:var(--f-mono);font-stretch:87.5%;font-size:.75rem;line-height:1.7;color:var(--amber);text-align:right;white-space:nowrap}
+.course{display:flex;flex-direction:column;gap:.35rem;margin-top:.4rem;color:var(--bone-2)}
+.skills{display:grid;grid-template-columns:1fr;gap:1.6rem 2.5rem;align-content:start}
+@media (min-width:560px){ .skills{grid-template-columns:repeat(2,minmax(0,1fr))} }
+.skills div{border-top:2px solid rgba(110,231,234,.5);padding-top:.8rem}
+.skills dt{font-family:var(--f-mono);font-stretch:87.5%;font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--cyan);margin-bottom:.4rem}
+.skills dd{color:var(--bone-2);font-size:.98rem}
+.certs{margin-top:clamp(3rem,6vw,4.5rem);padding-top:clamp(2rem,4vw,2.75rem);border-top:1px solid rgba(203,213,210,.16)}
+.certs h3{margin-bottom:1.75rem;font-stretch:62%;text-transform:uppercase;font-weight:850;font-size:clamp(1.9rem,4vw,2.75rem)}
+.cert-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr));gap:2rem 3rem;max-width:52rem}
+.cert-list li{display:flex;align-items:center;gap:1.4rem}
+/* the official badges, cut out like stickers: a white die-cut edge, a slight tilt and a drop shadow */
+.sticker{flex:none;width:clamp(5.5rem,14vw,7.5rem);height:auto;transform:rotate(var(--tilt,-5deg));
+  filter:drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff) drop-shadow(0 12px 16px rgba(0,0,0,.55));
+  transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.cert-list li:nth-child(2) .sticker{--tilt:4deg}
+.cert-list li:hover .sticker{transform:rotate(0) scale(1.04)}
+@media (prefers-reduced-motion: reduce){ .sticker{transition:none} }
+.cert-list b{display:block;font-family:var(--f-display);font-stretch:85%;font-weight:700;font-size:clamp(1.2rem,2vw,1.4rem);line-height:1.15;color:var(--bone)}
+.cert-list span{display:block;margin-top:.4rem;font-family:var(--f-mono);font-stretch:87.5%;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}

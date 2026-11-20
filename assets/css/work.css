@@ -1,0 +1,71 @@
+/*
+  Work: the projects section, its holographic glass panels (.holo) and their inline SVG diagrams (.viz).
+*/
+
+.work{position:relative;overflow:clip;padding-block:clamp(4.5rem,10vw,8rem) clamp(3.5rem,7vw,5rem);
+  background:
+    linear-gradient(to bottom,transparent calc(100% - 14rem),var(--deep)),
+    radial-gradient(38rem 26rem at 8% 12%,rgba(110,231,234,.13),transparent 70%),
+    radial-gradient(34rem 30rem at 92% 30%,rgba(168,147,255,.15),transparent 70%),
+    radial-gradient(30rem 22rem at 30% 70%,rgba(255,106,31,.07),transparent 70%),
+    radial-gradient(40rem 30rem at 85% 92%,rgba(110,231,234,.10),transparent 70%),
+    linear-gradient(to bottom,var(--jacket),var(--deep) 18rem,var(--deep))}
+/* blurred office lights behind the glass */
+.work::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;
+  background:
+    radial-gradient(3rem 3rem at 14% 28%,rgba(110,231,234,.35),transparent 70%),
+    radial-gradient(2rem 2rem at 22% 34%,rgba(255,180,90,.25),transparent 70%),
+    radial-gradient(4rem 4rem at 78% 18%,rgba(168,147,255,.32),transparent 70%),
+    radial-gradient(2.5rem 2.5rem at 88% 52%,rgba(110,231,234,.28),transparent 70%),
+    radial-gradient(3.5rem 3.5rem at 6% 66%,rgba(168,147,255,.25),transparent 70%),
+    radial-gradient(2rem 2rem at 60% 84%,rgba(255,180,90,.2),transparent 70%)}
+.work .wrap{position:relative}
+
+.holo{--ry:0deg;--rx:3deg;position:relative;display:flex;flex-direction:column;gap:.85rem;min-width:0;
+  padding:clamp(1.25rem,2.5vw,1.75rem);border-radius:20px;
+  background:linear-gradient(155deg,rgba(150,236,255,.11),rgba(168,147,255,.06) 55%,rgba(255,255,255,.025));
+  -webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1px rgba(110,231,234,.10),0 0 46px -10px rgba(110,231,234,.38),0 0 60px -18px rgba(168,147,255,.35),0 36px 70px -34px rgba(0,0,0,.9);
+  transform:perspective(1600px) rotateX(var(--rx)) rotateY(var(--ry));
+  transition:transform .45s cubic-bezier(.2,.7,.2,1),box-shadow .45s ease}
+.holo::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
+  background:linear-gradient(140deg,rgba(110,231,234,.85),rgba(110,231,234,.1) 32%,rgba(168,147,255,.1) 66%,rgba(168,147,255,.8));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+/* light projected up from below the panel */
+.holo::after{content:"";position:absolute;left:12%;right:12%;bottom:-34px;height:44px;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(110,231,234,.32),transparent);filter:blur(8px)}
+.holo:hover,.holo:focus-within{--ry:0deg;--rx:0deg;transform:perspective(1600px) translateY(-4px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 0 0 1px rgba(110,231,234,.2),0 0 60px -8px rgba(110,231,234,.5),0 0 80px -16px rgba(168,147,255,.5),0 40px 80px -34px rgba(0,0,0,.95)}
+@media (prefers-reduced-motion: reduce){ .holo{transition:none} }
+.holo .kicker{color:var(--cyan)}
+.holo h3 small{display:block;margin-top:.45rem;font-family:var(--f-body);font-stretch:100%;font-size:1rem;font-weight:500;line-height:1.35;color:var(--bone-2)}
+.result{font-family:var(--f-mono);font-stretch:87.5%;font-size:.85rem;font-weight:600;color:var(--amber);font-variant-numeric:tabular-nums}
+.desc{color:var(--bone-2);max-width:62ch}
+.stack{display:flex;flex-wrap:wrap;gap:.4rem}
+.stack li{font-family:var(--f-mono);font-stretch:87.5%;font-size:.68rem;color:var(--bone-2);padding:.2rem .5rem;border-radius:6px;background:rgba(110,231,234,.07);box-shadow:inset 0 0 0 1px rgba(110,231,234,.2)}
+.links{display:flex;flex-wrap:wrap;gap:.5rem 1.4rem;margin-top:auto;padding-top:.35rem}
+.links a{font-weight:600;color:var(--bone);text-decoration-color:rgba(110,231,234,.6)}
+.links a:hover{color:var(--cyan)}
+.viz{margin:-.25rem 0 .35rem;padding:.75rem .5rem .25rem;border-radius:12px;background:linear-gradient(to bottom,rgba(110,231,234,.06),transparent)}
+.viz svg{display:block;width:100%;height:auto;overflow:visible;filter:drop-shadow(0 0 4px rgba(110,231,234,.55))}
+.viz .s{fill:none;stroke:var(--cyan);stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+.viz .v{fill:none;stroke:var(--violet);stroke-width:1.3}
+.viz .d{stroke-dasharray:4 4}
+.viz .f{fill:var(--cyan)}
+.viz .fv{fill:var(--violet)}
+.viz .fa{fill:var(--amber)}
+.viz text{font-family:var(--f-mono);font-size:9px;fill:var(--bone-2);letter-spacing:.02em}
+.viz text.c{text-anchor:middle}
+.viz text.e{text-anchor:end}
+
+.feature{display:grid;grid-template-columns:1fr;gap:1.5rem 3rem;margin-bottom:clamp(2.5rem,5vw,3.5rem)}
+.feature .viz{margin:0;align-self:center}
+@media (min-width:900px){ .feature{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center} .feature .viz{grid-column:2;grid-row:1 / span 7} }
+.feature h3{font-size:clamp(2.2rem,5vw,3.6rem)}
+
+.grid{display:grid;grid-template-columns:1fr;gap:clamp(2.25rem,4vw,3rem) clamp(1.5rem,3vw,2.25rem)}
+@media (min-width:820px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid > .holo:nth-child(odd){--ry:5deg}
+  .grid > .holo:nth-child(even){--ry:-5deg}
+}

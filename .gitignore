@@ -1,12 +1,9 @@
-# Only the website is published: the page and the images it uses.
-# Everything else here (resume, references, original photos, prompts, notes) stays local.
+# Allowlist: only the website is published (the page, its assets and the README).
+# private/ (resume, original photo, references, prompts, drafts) and CLAUDE.md stay local.
 /*
 !/.gitignore
+!/README.md
 !/index.html
-!/images/
-/images/*
-!/images/hero.jpg
-!/images/contact.jpg
-!/images/aws-*.png
-!/images/icon-*.png
-!/images/apple-touch-icon.png
+!/assets/
+
+.DS_Store
