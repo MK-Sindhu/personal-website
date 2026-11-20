@@ -432,6 +432,63 @@ h3{font-family:var(--f-display);font-stretch:75%;font-weight:780;font-size:clamp
           <p class="links"><a href="https://github.com/MK-Sindhu/ai-app-builder">View code on GitHub ↗</a></p>
         </article>
 
+        <article class="holo" aria-labelledby="arch-title">
+          <div class="viz">
+            <svg viewBox="0 0 320 120" role="img" aria-label="Diagram: a dig down through four layers, from the code to the commit that changed it, its pull request and the issue behind it. The answer cites each find.">
+              <text x="2" y="20">code</text><text x="2" y="46">commit</text><text x="2" y="72">PR · goal</text><text x="2" y="98">issue · need</text>
+              <path class="v d" d="M86 30 C134 27 182 33 230 30 S300 28 318 30 M86 56 C134 59 182 53 230 56 S300 58 318 56 M86 82 C134 79 182 85 230 82 S300 80 318 82"/>
+              <path class="s" d="M104 17 L150 43 L196 69 L242 95"/>
+              <circle class="f" cx="104" cy="17" r="4"/><circle class="f" cx="150" cy="43" r="4"/><circle class="f" cx="196" cy="69" r="4"/><circle class="fa" cx="242" cy="95" r="4.5"/>
+              <text x="113" y="20.5">[1]</text><text x="159" y="46.5">[2]</text><text x="205" y="72.5">[3]</text><text x="251" y="98.5">[4]</text>
+              <path class="v d" d="M246 90 C296 82 306 52 289 29"/><path class="v" d="M295 30 L288 27 L289 34"/>
+              <rect class="v" x="214" y="1" width="104" height="22" rx="11"/>
+              <text class="c" x="266" y="15.5">answer [1]–[4]</text>
+              <text x="86" y="116">git log -L · GitHub links</text>
+            </svg>
+          </div>
+          <p class="kicker">LLM agents · Open source</p>
+          <h3 id="arch-title">Repo Archaeologist</h3>
+          <p class="result">Code → commit → PR → issue, with every claim cited</p>
+          <p class="desc">A LangGraph agent that answers “why is this code like this?” about any git repository. It finds the code, traces its history with git log -L, then follows each commit to its pull request and the issues behind it. Every claim in the answer cites the commit, PR, issue or code it rests on, and a verification step checks each claim against the evidence. Search is hybrid: BM25 plus dense embeddings. It also mines benchmark questions from real merged PRs, for comparing the agent with simpler baselines.</p>
+          <ul class="stack" aria-label="Tech stack"><li>Python</li><li>LangGraph</li><li>SQLite FTS5</li><li>FastEmbed</li><li>GitHub REST API</li><li>TypeScript</li></ul>
+          <p class="links"><a href="https://repo-archaeologist.vercel.app">Watch a recorded run ↗</a><a href="https://github.com/MK-Sindhu/repo-archaeologist">View code on GitHub ↗</a></p>
+        </article>
+
+        <article class="holo" aria-labelledby="obligraph-title">
+          <div class="viz">
+            <svg viewBox="0 0 320 120" role="img" aria-label="Diagram: a regulator's circular is split into checkable requirements, linked in a graph of what amends or supersedes what, and gaps against an organisation's policies become dated tasks on a calendar.">
+              <text x="8" y="16">RBI · SEBI</text>
+              <rect class="s" x="8" y="24" width="40" height="52" rx="4"/>
+              <path class="v" d="M16 36 H40 M16 44 H40 M16 52 H34 M16 60 H38 M16 68 H30"/>
+              <path class="s" d="M52 50 H66 M61 45 L66 50 L61 55"/>
+              <rect class="s" x="72" y="30" width="8" height="8" rx="2"/><path class="s" d="M86 34 H126"/>
+              <rect class="s" x="72" y="46" width="8" height="8" rx="2"/><path class="s" d="M86 50 H120"/>
+              <rect class="s" x="72" y="62" width="8" height="8" rx="2"/><path class="s" d="M86 66 H124"/>
+              <path class="s" d="M132 50 H146 M141 45 L146 50 L141 55"/>
+              <path class="s" d="M158 38 L190 24 M158 38 L184 72 M190 24 L216 50 M184 72 L216 50"/>
+              <path class="v d" d="M190 24 L184 72"/>
+              <circle class="fv" cx="158" cy="38" r="4"/><circle class="f" cx="190" cy="24" r="4"/><circle class="f" cx="216" cy="50" r="4"/><circle class="f" cx="184" cy="72" r="4"/>
+              <path class="s" d="M228 50 H244 M239 45 L244 50 L239 55"/>
+              <rect class="s" x="252" y="22" width="62" height="56" rx="5"/>
+              <path class="s" d="M252 34 H314 M264 18 V26 M302 18 V26"/>
+              <circle class="fv" cx="262" cy="45" r="1.6"/><circle class="fv" cx="276" cy="45" r="1.6"/><circle class="fv" cx="290" cy="45" r="1.6"/><circle class="fv" cx="304" cy="45" r="1.6"/>
+              <circle class="fv" cx="262" cy="57" r="1.6"/><circle class="fv" cx="276" cy="57" r="1.6"/><rect class="fa" x="285" y="52" width="10" height="10" rx="2"/><circle class="fv" cx="304" cy="57" r="1.6"/>
+              <circle class="fv" cx="262" cy="69" r="1.6"/><circle class="fv" cx="276" cy="69" r="1.6"/><circle class="fv" cx="290" cy="69" r="1.6"/><circle class="fv" cx="304" cy="69" r="1.6"/>
+              <text class="c" x="28" y="92">circular</text>
+              <text class="c" x="100" y="92">obligations</text>
+              <text class="c" x="190" y="92">lineage graph</text>
+              <text class="c" x="283" y="92">dated tasks</text>
+              <text class="c" x="160" y="112">gap check · quotes verified verbatim</text>
+            </svg>
+          </div>
+          <p class="kicker">Generative AI · Regulatory compliance</p>
+          <h3 id="obligraph-title">Obligraph</h3>
+          <p class="result">Circular → checkable obligations → dated tasks</p>
+          <p class="desc">Regulatory obligations intelligence for Indian financial institutions. It watches regulators such as RBI and SEBI, and Claude turns each circular into discrete, checkable requirements, linked in a knowledge graph of what amends or supersedes what. It works out which requirements bind an organisation, checks its policies against them with every quote verified word for word, and turns the gaps into dated tasks on a compliance calendar. A LangGraph maker-checker workflow handles approvals, and a copilot answers questions with citations.</p>
+          <ul class="stack" aria-label="Tech stack"><li>FastAPI</li><li>Next.js</li><li>PostgreSQL + pgvector</li><li>LangGraph</li><li>Claude API</li><li>Vercel</li></ul>
+          <p class="links"><a href="https://obligraph-web.vercel.app">Try the live demo ↗</a><a href="https://github.com/MK-Sindhu/obligraph">View code on GitHub ↗</a></p>
+        </article>
+
         <article class="holo" aria-labelledby="fraud-title">
           <div class="viz">
             <svg viewBox="0 0 320 120" role="img" aria-label="Diagram: data, training, registry and serving stages in a loop, where detected drift triggers retraining.">
