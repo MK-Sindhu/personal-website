@@ -39,7 +39,7 @@ The stylesheets are loaded in the order above, which is also their cascade order
 
 ## Editing
 
-- **Text and projects** are in `index.html`, one `<section>` per part of the page. To add a project, copy one of the `<article class="holo proj">` panels in `#work` and give it a card colour with `data-theme` (`silver`, `ink`, `orange` or `violet`). Its diagram is an inline SVG that uses the `.viz` classes from `work.css`. The wheel builds each card from its panel (number, category, title and diagram), and without JavaScript the panels show as a grid.
+- **Text and projects** are in `index.html`, one `<section>` per part of the page. To add a project, copy one of the `<article class="holo proj">` panels in `#work` and give it a card colour with `data-theme` (`silver`, `ink`, `orange` or `violet`). Its diagram is an inline SVG that uses the `.viz` classes from `work.css`. The wheel builds each card from its panel (number, category, title and diagram), and without JavaScript the panels show as a grid. Visitors turn it by dragging, scrolling over it, the arrow buttons or keys, or clicking a card; a soft click plays as each card passes, and a Sound button turns that off.
 - **Colours and fonts** are set in `assets/css/tokens.css`.
 - **Scripts** are classic `defer` scripts, not ES modules, so the page still works when opened straight from the file system.
 
