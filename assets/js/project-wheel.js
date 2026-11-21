@@ -40,7 +40,7 @@
       '<path id="wheel-ring-path" d="M-80 0a80 80 0 1 1 160 0a80 80 0 1 1-160 0" fill="none"/>' +
       '<circle r="96"/><circle r="64"/>' +
       '<text><textPath href="#wheel-ring-path" textLength="502" lengthAdjust="spacing">' +
-        'SELECTED WORK · RESEARCH AND PROJECTS · SELECTED WORK · RESEARCH AND PROJECTS · ' +
+        'SELECTED PROJECTS · SELECTED PROJECTS · SELECTED PROJECTS · SELECTED PROJECTS · ' +
       '</textPath></text>' +
     '</svg>';
   wheel.appendChild(ring);

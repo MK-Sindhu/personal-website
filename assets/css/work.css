@@ -60,13 +60,18 @@
 .viz text.c{text-anchor:middle}
 .viz text.e{text-anchor:end}
 
-/* Without JavaScript: a grid, with the research paper across the top */
+/* The research paper: a wide panel above the projects, with its diagram beside the text */
+.feature{display:grid;grid-template-columns:1fr;gap:1.5rem 3rem;margin-bottom:clamp(2.5rem,5vw,3.5rem)}
+.feature .viz{margin:0;align-self:center}
+@media (min-width:900px){ .feature{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center} .feature .viz{grid-column:2;grid-row:1 / span 7} }
+.feature h3{font-size:clamp(2.2rem,5vw,3.6rem)}
+
+/* Projects without JavaScript: a two-column grid */
 .projects{display:grid;grid-template-columns:1fr;gap:clamp(2.25rem,4vw,3rem) clamp(1.5rem,3vw,2.25rem)}
 @media (min-width:820px){
   .projects{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .projects > .proj:first-child{grid-column:1 / -1}
-  .projects > .proj:nth-child(even){--ry:5deg}
-  .projects > .proj:nth-child(odd):not(:first-child){--ry:-5deg}
+  .projects > .proj:nth-child(odd){--ry:5deg}
+  .projects > .proj:nth-child(even){--ry:-5deg}
 }
 
 /* ───────── Projects wheel ─────────
