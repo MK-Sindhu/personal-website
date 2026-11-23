@@ -8,8 +8,8 @@
 // - the arrow buttons, the arrow keys, or a click on any card
 // A soft click plays as each card passes the front. The Sound button turns it off, and the choice is kept.
 //
-// The panels stay the single source of content: each card is built from its panel's category, title
-// and diagram. Without JavaScript the panels stay a grid.
+// The panels stay the single source of content: each card is built from its panel's category, title,
+// diagram and live-site link (the link marked data-site, if it has one). Without JavaScript the panels stay a grid.
 (function () {
   var list = document.querySelector('[data-wheel]');
   if (!list) return;
@@ -72,6 +72,19 @@
     card.appendChild(art);
 
     card.appendChild(el('p', 'card-title', titleOf(proj)));
+
+    // A button to the project's live site, for projects whose panel has a link marked data-site.
+    // It works on the front card only (CSS); the panel's own link serves keyboards and screen readers.
+    var site = proj.querySelector('a[data-site]');
+    if (site) {
+      var visit = el('a', 'card-link', 'Visit site ↗');
+      visit.href = site.href;
+      visit.target = '_blank';
+      visit.rel = 'noopener';
+      visit.tabIndex = -1;
+      visit.draggable = false;
+      card.appendChild(visit);
+    }
     wheel.appendChild(card);
     return card;
   });
@@ -238,6 +251,7 @@
 
   stage.addEventListener('pointerdown', function (e) {
     if (e.button !== 0) return;
+    if (e.target.closest && e.target.closest('.card-link')) return;   // let the Visit site button take the click
     dragging = true;
     moved = false;
     startX = e.clientX;

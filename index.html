@@ -120,7 +120,7 @@
           <p class="result">Code → commit → PR → issue, with every claim cited</p>
           <p class="desc">An open-source LangGraph agent that answers “why is this code like this?” about any git repository. It traces the code to the commits that changed it, then follows them across several hops to their pull requests and the issues behind them. It grades the evidence, verifies each claim against it and cites its sources inline. Search runs on a hybrid BM25 and vector index with reciprocal rank fusion, and GitHub calls go through an ETag-cached REST client. An evaluation harness benchmarks the agent against plain-RAG and single-commit baselines on citation validity, latency and cost.</p>
           <ul class="stack" aria-label="Tech stack"><li>Python</li><li>LangGraph</li><li>SQLite FTS5</li><li>FastEmbed</li><li>GitHub REST API</li><li>TypeScript</li></ul>
-          <p class="links"><a href="https://repo-archaeologist.vercel.app" target="_blank" rel="noopener">Watch a recorded run ↗</a><a href="https://github.com/MK-Sindhu/repo-archaeologist" target="_blank" rel="noopener">View code on GitHub ↗</a></p>
+          <p class="links"><a href="https://repo.ndstill.com" data-site target="_blank" rel="noopener">Visit the live site ↗</a><a href="https://github.com/MK-Sindhu/repo-archaeologist" target="_blank" rel="noopener">View code on GitHub ↗</a></p>
         </article>
 
         <article class="holo proj" data-theme="orange" aria-labelledby="obligraph-title">
@@ -155,7 +155,7 @@
           <p class="result">Circular → checkable obligations → dated tasks</p>
           <p class="desc">A multi-tenant compliance platform for Indian financial institutions. It monitors RBI and SEBI circulars, extracts their requirements with Claude and validates them with Pydantic, and models regulations as a knowledge graph with amendment lineage and point-in-time queries. Policy gap analysis runs on Postgres full-text and pgvector hybrid search, and the gaps feed a remediation workflow with LangGraph maker-checker approvals, SLA escalation and SHA-256-verified audit packs.</p>
           <ul class="stack" aria-label="Tech stack"><li>FastAPI</li><li>Next.js</li><li>PostgreSQL + pgvector</li><li>LangGraph</li><li>Claude API</li><li>Pydantic</li></ul>
-          <p class="links"><a href="https://obligraph-web.vercel.app" target="_blank" rel="noopener">Try the live demo ↗</a><a href="https://github.com/MK-Sindhu/obligraph" target="_blank" rel="noopener">View code on GitHub ↗</a></p>
+          <p class="links"><a href="https://obligraph.ndstill.com" data-site target="_blank" rel="noopener">Visit the live site ↗</a><a href="https://github.com/MK-Sindhu/obligraph" target="_blank" rel="noopener">View code on GitHub ↗</a></p>
         </article>
 
         <article class="holo proj" data-theme="violet" aria-labelledby="ndstill-title">
@@ -182,7 +182,7 @@
           <p class="result">Nine checks on every agent transfer, before any money moves</p>
           <p class="desc">A non-custodial control plane for AI agent spending. Agents pay from a business's own bank accounts, and each one gets caps instead of a balance: per-transfer, daily and monthly limits. Transfers that are over a threshold or look unusual wait for a person to approve them, a kill switch freezes one agent or the whole organisation, and every step goes to an append-only audit log. Agents connect through a REST API or an MCP server.</p>
           <ul class="stack" aria-label="Tech stack"><li>Rust</li><li>PostgreSQL</li><li>MCP server</li><li>REST API</li><li>Next.js</li></ul>
-          <p class="links"><a href="https://www.ndstill.com" target="_blank" rel="noopener">Visit ndstill.com ↗</a></p>
+          <p class="links"><a href="https://www.ndstill.com" data-site target="_blank" rel="noopener">Visit ndstill.com ↗</a></p>
         </article>
 
         <article class="holo proj" data-theme="silver" aria-labelledby="builder-title">
@@ -207,7 +207,7 @@
           <p class="result">Natural-language prompt → live React 19 app</p>
           <p class="desc">Turns a prompt into a running Vite and React 19 app in TypeScript and Tailwind, with an in-browser code editor, project preview URLs and iterative edits. It runs on three tiers (Next.js 15, Express and Prisma) with AWS EC2 Auto Scaling workers. Each project gets its own worker, which is released when it goes idle to keep compute costs down.</p>
           <ul class="stack" aria-label="Tech stack"><li>Next.js 15</li><li>Express</li><li>Prisma</li><li>AWS EC2 Auto Scaling</li><li>Docker Compose</li><li>Caddy</li></ul>
-          <p class="links"><a href="https://github.com/MK-Sindhu/ai-app-builder" target="_blank" rel="noopener">View code on GitHub ↗</a></p>
+          <p class="links"><a href="https://web-builder.ndstill.com" data-site target="_blank" rel="noopener">Visit the live site ↗</a><a href="https://github.com/MK-Sindhu/ai-app-builder" target="_blank" rel="noopener">View code on GitHub ↗</a></p>
         </article>
 
         <article class="holo proj" data-theme="orange" aria-labelledby="fraud-title">
@@ -253,7 +253,7 @@
           <p class="result">Website checks every 30 s from regional workers</p>
           <p class="desc">Regional workers check websites every 30 seconds and deliver results over Redis Streams with acknowledge-after-write. Results are stored in ClickHouse, where materialized views compute hourly uptime, median and 95th-percentile latency, and incidents. These are served through OpenAPI REST APIs and a Next.js dashboard.</p>
           <ul class="stack" aria-label="Tech stack"><li>Redis Streams</li><li>ClickHouse</li><li>PostgreSQL</li><li>Next.js</li><li>Kubernetes</li><li>GitHub Actions</li></ul>
-          <p class="links"><a href="https://github.com/MK-Sindhu/uptime-watch" target="_blank" rel="noopener">View code on GitHub ↗</a></p>
+          <p class="links"><a href="https://uptime-watch.ndstill.com" data-site target="_blank" rel="noopener">Visit the live site ↗</a><a href="https://github.com/MK-Sindhu/uptime-watch" target="_blank" rel="noopener">View code on GitHub ↗</a></p>
         </article>
       </div>
     </div>

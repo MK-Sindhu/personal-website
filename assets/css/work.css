@@ -119,6 +119,13 @@
 .card-art .viz .s,.card-art .viz .v{stroke-width:1.8}
 .card-title{font-family:var(--f-display);font-stretch:62%;font-weight:850;text-transform:uppercase;
   font-size:calc(var(--cw) * .125);line-height:.88;letter-spacing:-.005em;overflow-wrap:anywhere}
+/* Visit site button: live on the front card only, so a click on any other card still brings it round */
+.card-link{align-self:flex-start;display:inline-flex;align-items:center;min-height:calc(var(--cw) * .13);padding:0 calc(var(--cw) * .06);border-radius:999px;
+  box-shadow:inset 0 0 0 1.5px currentColor;color:inherit;text-decoration:none;cursor:pointer;
+  font-family:var(--f-mono);font-stretch:87.5%;font-weight:600;font-size:max(10px,calc(var(--cw) * .04));letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;
+  transition:background-color .2s ease}
+.card-link:hover{background:rgba(127,127,127,.28)}
+.card:not(.is-active) .card-link{pointer-events:none}
 
 /* Card colours, from the site palette */
 .card[data-theme="ink"]{--card-bg:radial-gradient(120% 70% at 50% 38%,rgba(110,231,234,.14),transparent 65%),#0C0D0E;--card-ink:var(--bone);
