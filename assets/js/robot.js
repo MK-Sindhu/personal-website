@@ -5,7 +5,8 @@
 // - breathes, blinks, and turns its head towards the pointer (or the last tap)
 // - waves once, shortly after it appears
 // - watches the projects wheel and nods as each card passes (the wheel sends "wheelcard" events)
-// - smiles and hops when the email address is copied ("emailcopied"), or when it is clicked
+// - smiles and hops when the email address is copied ("emailcopied")
+// - does a trick when it is clicked, a different one each time: hop, spin, backflip, dance, head spin
 //
 // It is decoration only: hidden from screen readers, and it never takes a click away from the page.
 // With reduced motion it is drawn once, standing still. Without WebGL it does not appear.
@@ -186,8 +187,12 @@
     var now = 0;                       // seconds, advanced only while animating
     var look = { x: -0.35, y: 0 };     // where it wants to look: -1..1 across and down the window
     var lookUntil = 0, lookAt = null;  // a temporary point of interest (the wheel), until `lookUntil`
-    var waveFrom = -1, hopFrom = -1, nodFrom = -1, smileUntil = 0, nextBlink = 2.5, blinkFrom = -1;
+    var waveFrom = -1, nodFrom = -1, smileUntil = 0, nextBlink = 2.5, blinkFrom = -1;
     var yaw = 0, pitch = 0;
+
+    // Tricks: name and length in seconds. A click plays the next one; `trick` is the one playing now.
+    var TRICKS = [['hop', 0.5], ['spin', 0.85], ['flip', 0.95], ['dance', 1.9], ['headspin', 0.9]];
+    var trick = null, trickFrom = 0, nextTrick = 0, calm = 0;
 
     function centre(el) {
       var r = el.getBoundingClientRect();
@@ -198,13 +203,30 @@
       look.x = Math.max(-1, Math.min(1, (px - c.x) / (window.innerWidth * 0.5)));
       look.y = Math.max(-1, Math.min(1, (py - c.y) / (window.innerHeight * 0.6)));
     }
-    function cheer() { hopFrom = now; smileUntil = now + 1.6; kick(); }
+    function play(i) {
+      if (reduce.matches) {            // no movement: just a smile for a moment
+        smileUntil = now + 1;
+        clearTimeout(calm);
+        calm = setTimeout(function () { smileUntil = 0; kick(); }, 1200);
+      } else if (!trick) {
+        trick = TRICKS[i];
+        trickFrom = now;
+        smileUntil = now + trick[1] + 0.7;
+      }
+      kick();
+    }
+    function cheer() { play(0); }
+    function doTrick() {
+      if (trick) return;               // let the current one finish
+      play(nextTrick);
+      nextTrick = (nextTrick + 1) % TRICKS.length;
+    }
 
     window.addEventListener('pointermove', function (e) { aim(e.clientX, e.clientY); }, { passive: true });
     window.addEventListener('pointerdown', function (e) {
       aim(e.clientX, e.clientY);
       var r = box.getBoundingClientRect();
-      if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) cheer();
+      if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) doTrick();
     }, { passive: true });
     document.addEventListener('wheelcard', function () {
       var stage = document.querySelector('.stage');
@@ -234,35 +256,48 @@
         var n = (now - nodFrom) / 0.32;
         if (n < 1) nod = Math.sin(n * Math.PI) * 0.2; else nodFrom = -1;
       }
-      head.rotation.set(pitch + nod, yaw, Math.sin(now * 0.9) * 0.025);
-      root.rotation.y = -0.3 + yaw * 0.3;
+      // the trick in progress: p runs from 0 to 1 over its length
+      var up = 0, turn = 0, flip = 0, lean = 0, headTurn = 0, armsUp = 0, pump = 0;
+      if (trick) {
+        var p = (now - trickFrom) / trick[1], name = trick[0], arcUp = Math.sin(Math.min(1, p) * Math.PI);
+        if (p >= 1) trick = null;
+        else if (name === 'hop') up = arcUp * 0.34;
+        else if (name === 'spin') { up = arcUp * 0.2; turn = ease(p) * Math.PI * 2; }
+        else if (name === 'flip') { up = arcUp * 0.6; flip = -ease(p) * Math.PI * 2; }
+        else if (name === 'headspin') headTurn = ease(p) * Math.PI * 2;
+        else if (name === 'dance') {
+          var env = ease(p / 0.12) * (1 - ease((p - 0.88) / 0.12)), beat = p * Math.PI * 8;
+          lean = Math.sin(beat) * 0.13 * env;
+          up = Math.abs(Math.sin(beat)) * 0.09 * env;
+          armsUp = env;
+          pump = Math.sin(beat) * 0.35 * env;
+        }
+      }
+
+      head.rotation.set(pitch + nod, yaw + headTurn, Math.sin(now * 0.9) * 0.025);
+      // a backflip turns about the middle of the body (y = 1.5), not the feet
+      root.rotation.set(flip, -0.3 + yaw * 0.3 + turn, lean);
+      root.position.set(0, up + 1.5 - 1.5 * Math.cos(flip), -1.5 * Math.sin(flip));
 
       // breathing and a slow sway
       var breath = Math.sin(now * 1.8);
       body.scale.set(1 + breath * 0.008, 1 + breath * 0.012, 1 + breath * 0.008);
       head.position.y = 1.56 + breath * 0.012;
 
-      // hop
-      var up = 0;
-      if (hopFrom >= 0) {
-        var h = (now - hopFrom) / 0.5;
-        if (h < 1) up = Math.sin(h * Math.PI) * 0.34; else hopFrom = -1;
-      }
-      root.position.y = up;
       var sq = 1 - up * 0.5;
       shadow.scale.set(sq, sq, 1);
       shadow.material.opacity = 0.9 - up;
 
       // arms: hanging with a little swing; the right one waves
       var swing = Math.sin(now * 1.8 + 1) * 0.04;
-      armL.rotation.z = -0.22 - swing - up * 1.2;
+      armL.rotation.z = -0.22 - swing - (armsUp ? armsUp * 2.2 - pump : up * 1.2);
       var raise = 0, wag = 0;
       if (waveFrom >= 0) {
         var w = now - waveFrom;
         if (w < 2.3) { raise = ease(w / 0.35) * (1 - ease((w - 1.9) / 0.4)); wag = Math.sin(w * 11) * 0.3 * raise; }
         else waveFrom = -1;
       }
-      armR.rotation.z = 0.22 + swing + up * 1.2 + raise * 2.25 + wag;
+      armR.rotation.z = 0.22 + swing + (armsUp ? armsUp * 2.2 + pump : up * 1.2) + raise * 2.25 + wag;
 
       // eyes: blink, or smile
       var smiling = now < smileUntil;
