@@ -6,8 +6,8 @@
 // - waves once, shortly after it appears
 // - watches the projects wheel and nods as each card passes (the wheel sends "wheelcard" events)
 // - smiles and hops when the email address is copied ("emailcopied")
-// - opens a small menu when it is clicked, to pick what it does: hop, spin, backflip, dance, head spin,
-//   a skipping dance with a rope, stopping to think, or "Surprise me" for a random one
+// - shows a ring of round buttons when the pointer is over it (or it is tapped), to pick what it does:
+//   hop, spin, backflip, dance, head spin, a skipping dance with a rope, stopping to think, or a random one
 // - now and then does one of the calmer ones by itself
 // Every trick eases in from the standing pose and back out to it, so nothing jumps.
 //
@@ -239,35 +239,101 @@
     }
     function cheer() { play('hop'); }
 
-    // The menu: opened by a click on the robot, closed by a choice, a click elsewhere or Escape.
-    var menu = document.createElement('div');
-    menu.className = 'robot-menu';
-    menu.setAttribute('role', 'group');
-    menu.setAttribute('aria-label', 'Robot tricks');
-    menu.hidden = true;
-    function option(label, name) {
+    // The action ring: round buttons on an arc round the robot, with a dashed circle behind them.
+    // It opens while a mouse is over the robot and stays while the pointer is on or inside the ring;
+    // on touch screens a tap on the robot opens and closes it. Escape or a click elsewhere closes it.
+    var ICONS = {
+      hop: '<path d="M12 18V5M7 10l5-5 5 5M6 21h12"/>',
+      spin: '<path d="M20 12a8 8 0 1 1-2.6-5.9M20 4v5h-5"/>',
+      flip: '<path d="M5 19a7.5 7.5 0 1 1 14 0M19 19l-4.6-.6M19 19l.9-4.6"/><circle cx="12" cy="12.5" r="1.6"/>',
+      dance: '<path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/>',
+      headspin: '<rect x="7" y="9" width="10" height="8" rx="3"/><path d="M10.5 12v2M13.5 12v2M4 11a8 8 0 0 1 14-5M18 2.5V6h-3.5"/>',
+      skip: '<path d="M4 8c0 15 16 15 16 0"/><circle cx="12" cy="8" r="2.6"/>',
+      think: '<circle cx="6" cy="18" r="1.4"/><circle cx="10.5" cy="13.5" r="2.2"/><circle cx="17" cy="7.5" r="3.4"/>',
+      random: '<path d="M12 3l2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z"/>'
+    };
+    var ring = document.createElement('div');
+    ring.className = 'robot-ring';
+    ring.setAttribute('role', 'group');
+    ring.setAttribute('aria-label', 'Robot tricks');
+    var ringLine = document.createElement('div');
+    ringLine.className = 'robot-ring-line';
+    ring.appendChild(ringLine);
+    var buttons = ALL.concat('random').map(function (name, i) {
       var b = document.createElement('button');
       b.type = 'button';
-      b.textContent = label;
-      b.addEventListener('click', function () { menu.hidden = true; play(name || pick(ALL)); });
-      menu.appendChild(b);
-    }
-    ALL.forEach(function (name) { option(LABELS[name], name); });
-    option('Surprise me', '');
-    menu.lastChild.className = 'robot-menu-wide';
-    document.body.appendChild(menu);
+      b.tabIndex = -1;
+      b.setAttribute('aria-label', LABELS[name] || 'Surprise me');
+      b.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + ICONS[name] + '</svg><span>' + (LABELS[name] || 'Surprise me') + '</span>';
+      b.style.setProperty('--k', i);
+      b.addEventListener('click', function () { closeRing(); play(name === 'random' ? pick(ALL) : name); });
+      ring.appendChild(b);
+      return b;
+    });
+    document.body.appendChild(ring);
 
-    window.addEventListener('pointermove', function (e) { aim(e.clientX, e.clientY); }, { passive: true });
+    var ringOpen = false, ringR = 0, closeTimer = 0;
+    // Lay the buttons out on the part of the circle that fits on screen: from just right of the top,
+    // round the left side, to just below the level of the robot's middle.
+    function layoutRing() {
+      var r = box.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      var b = buttons[0].offsetWidth || 44, half = b / 2 + 6, n = buttons.length;
+      var R = Math.max(r.height * 0.78, 96), a0 = 0, a1 = 0;
+      for (var pass = 0; pass < 4; pass++) {
+        a0 = Math.acos(Math.max(-1, Math.min(1, (window.innerWidth - cx - half) / R)));          // rightmost angle that stays on screen
+        a1 = Math.PI + Math.asin(Math.max(-1, Math.min(1, (window.innerHeight - cy - half) / R)));   // lowest
+        a1 = Math.min(a1, a0 + Math.PI * 0.9);
+        R = Math.max(R, (n - 1) * (b + 8) / (a1 - a0));                                           // wide enough that buttons do not touch
+      }
+      ringR = R;
+      buttons.forEach(function (btn, i) {
+        var a = a0 + (a1 - a0) * i / (n - 1);
+        btn.style.left = (cx + R * Math.cos(a)) + 'px';
+        btn.style.top = (cy - R * Math.sin(a)) + 'px';
+      });
+      ringLine.style.left = cx + 'px';
+      ringLine.style.top = cy + 'px';
+      ringLine.style.width = ringLine.style.height = (R * 2) + 'px';
+    }
+    function openRing() {
+      clearTimeout(closeTimer);
+      if (ringOpen || reduce.matches) return;      // nothing to choose when it does not move
+      layoutRing();
+      ringOpen = true;
+      ring.classList.add('is-open');
+    }
+    function closeRing() {
+      clearTimeout(closeTimer);
+      ringOpen = false;
+      ring.classList.remove('is-open');
+    }
+    function overRobot(e) {
+      var r = box.getBoundingClientRect();
+      return e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+    }
+    function nearRing(e) {                         // on the robot, a button, or anywhere inside the circle
+      var c = centre(box);
+      return Math.hypot(e.clientX - c.x, e.clientY - c.y) < ringR + 44;
+    }
+
+    window.addEventListener('pointermove', function (e) {
+      aim(e.clientX, e.clientY);
+      if (e.pointerType !== 'mouse') return;
+      if (overRobot(e)) openRing();
+      else if (ringOpen && nearRing(e)) clearTimeout(closeTimer);
+      else if (ringOpen) { clearTimeout(closeTimer); closeTimer = setTimeout(closeRing, 280); }
+    }, { passive: true });
     window.addEventListener('pointerdown', function (e) { aim(e.clientX, e.clientY); }, { passive: true });
     window.addEventListener('click', function (e) {
-      if (menu.contains(e.target)) return;
-      var r = box.getBoundingClientRect();
-      var onRobot = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
-      if (!onRobot) menu.hidden = true;
-      else if (reduce.matches) play('hop');          // nothing to choose when it does not move
-      else menu.hidden = !menu.hidden;
+      if (ring.contains(e.target)) return;
+      if (!overRobot(e)) closeRing();
+      else if (reduce.matches) play('hop');
+      else if (ringOpen && e.detail && matchMedia('(hover: none)').matches) closeRing();   // a second tap puts it away
+      else openRing();
     });
-    window.addEventListener('keydown', function (e) { if (e.key === 'Escape') menu.hidden = true; });
+    window.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeRing(); });
+    window.addEventListener('resize', function () { if (ringOpen) layoutRing(); });
+    window.addEventListener('scroll', function () { if (ringOpen && matchMedia('(hover: none)').matches) closeRing(); }, { passive: true });
     document.addEventListener('wheelcard', function () {
       var stage = document.querySelector('.stage');
       if (stage) { lookAt = stage; lookUntil = now + 1.4; }
