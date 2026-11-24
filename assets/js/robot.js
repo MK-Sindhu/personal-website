@@ -6,8 +6,8 @@
 // - waves once, shortly after it appears
 // - watches the projects wheel and nods as each card passes (the wheel sends "wheelcard" events)
 // - smiles and hops when the email address is copied ("emailcopied")
-// - does a trick when it is clicked, picked at random: hop, spin, backflip, dance, head spin,
-//   skipping with a rope, or stopping to think
+// - opens a small menu when it is clicked, to pick what it does: hop, spin, backflip, dance, head spin,
+//   a skipping dance with a rope, stopping to think, or "Surprise me" for a random one
 // - now and then does one of the calmer ones by itself
 // Every trick eases in from the standing pose and back out to it, so nothing jumps.
 //
@@ -204,9 +204,10 @@
     var yaw = 0, pitch = 0;
 
     // Tricks: length in seconds, and whether it smiles all the way through.
-    var TRICKS = { hop: [0.5, 1], spin: [0.85, 1], flip: [0.95, 1], dance: [1.9, 1], headspin: [0.9, 1], skip: [3.6, 1], think: [3.6, 0] };
+    var TRICKS = { hop: [0.5, 1], spin: [0.85, 1], flip: [0.95, 1], dance: [1.9, 1], headspin: [0.9, 1], skip: [4.2, 1], think: [3.6, 0] };
+    var LABELS = { hop: 'Hop', spin: 'Spin', flip: 'Backflip', dance: 'Dance', headspin: 'Head spin', skip: 'Skip', think: 'Think' };
     var ALL = Object.keys(TRICKS), CALM = ['think', 'skip', 'headspin', 'hop'];   // CALM: the ones it does by itself
-    var trick = '', trickFrom = 0, lastTrick = '', nextIdle = 9, calm = 0, smileShown = false;
+    var trick = '', queued = '', trickFrom = 0, lastTrick = '', nextIdle = 9, calm = 0, smileShown = false;
 
     function centre(el) {
       var r = el.getBoundingClientRect();
@@ -222,7 +223,9 @@
         smileUntil = now + 1;
         clearTimeout(calm);
         calm = setTimeout(function () { smileUntil = 0; kick(); }, 1200);
-      } else if (!trick) {
+      } else if (trick) {
+        queued = name;                 // plays as soon as the current one has finished
+      } else {
         trick = lastTrick = name;
         trickFrom = now;
         if (TRICKS[name][1]) smileUntil = now + TRICKS[name][0] + 0.6;
@@ -235,14 +238,36 @@
       return n;
     }
     function cheer() { play('hop'); }
-    function doTrick() { if (!trick) play(pick(ALL)); }   // a click during a trick lets it finish
+
+    // The menu: opened by a click on the robot, closed by a choice, a click elsewhere or Escape.
+    var menu = document.createElement('div');
+    menu.className = 'robot-menu';
+    menu.setAttribute('role', 'group');
+    menu.setAttribute('aria-label', 'Robot tricks');
+    menu.hidden = true;
+    function option(label, name) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = label;
+      b.addEventListener('click', function () { menu.hidden = true; play(name || pick(ALL)); });
+      menu.appendChild(b);
+    }
+    ALL.forEach(function (name) { option(LABELS[name], name); });
+    option('Surprise me', '');
+    menu.lastChild.className = 'robot-menu-wide';
+    document.body.appendChild(menu);
 
     window.addEventListener('pointermove', function (e) { aim(e.clientX, e.clientY); }, { passive: true });
-    window.addEventListener('pointerdown', function (e) {
-      aim(e.clientX, e.clientY);
+    window.addEventListener('pointerdown', function (e) { aim(e.clientX, e.clientY); }, { passive: true });
+    window.addEventListener('click', function (e) {
+      if (menu.contains(e.target)) return;
       var r = box.getBoundingClientRect();
-      if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) doTrick();
-    }, { passive: true });
+      var onRobot = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+      if (!onRobot) menu.hidden = true;
+      else if (reduce.matches) play('hop');          // nothing to choose when it does not move
+      else menu.hidden = !menu.hidden;
+    });
+    window.addEventListener('keydown', function (e) { if (e.key === 'Escape') menu.hidden = true; });
     document.addEventListener('wheelcard', function () {
       var stage = document.querySelector('.stage');
       if (stage) { lookAt = stage; lookUntil = now + 1.4; }
@@ -274,11 +299,11 @@
       // The trick in progress: p runs from 0 to 1 over its length. `env` rises from 0 to 1 at the start
       // and falls back at the end; every pose change is scaled by it, so tricks blend in and out.
       if (!trick && !reduce.matches && now > nextIdle) play(pick(CALM));
-      var up = 0, turn = 0, flip = 0, lean = 0, headTurn = 0, armsUp = 0, pump = 0, skip = 0, spinAt = 0, think = 0, p = 0;
+      var up = 0, turn = 0, flip = 0, lean = 0, headTurn = 0, headRoll = 0, armsUp = 0, pump = 0, skip = 0, spinAt = 0, think = 0, p = 0;
       if (trick) {
         p = (now - trickFrom) / TRICKS[trick][0];
         var arcUp = Math.sin(Math.min(1, p) * Math.PI), env = ease(p / 0.14) * (1 - ease((p - 0.86) / 0.14));
-        if (p >= 1) { trick = ''; nextIdle = now + 12 + Math.random() * 16; }
+        if (p >= 1) { trick = ''; nextIdle = now + 12 + Math.random() * 16; if (queued) { var q = queued; queued = ''; play(q); } }
         else if (trick === 'hop') up = arcUp * 0.34;
         else if (trick === 'spin') { up = arcUp * 0.2; turn = ease(p) * Math.PI * 2; }
         else if (trick === 'flip') { up = arcUp * 0.6; flip = -ease(p) * Math.PI * 2; }
@@ -290,11 +315,16 @@
           armsUp = env;
           pump = Math.sin(beat) * 0.35 * env;
         } else if (trick === 'skip') {
-          // six turns of the rope: speeding up over the first 15%, steady, slowing over the last 15%
+          // A skipping dance. Eight turns of the rope: speeding up over the first 15%, steady, slowing over
+          // the last 15%. It rocks and twists from side to side on alternate jumps, and spins once in the middle.
           var a = 0.15, v = 1 / (1 - a), g = p < a ? v * p * p / (2 * a) : p > 1 - a ? 1 - v * (1 - p) * (1 - p) / (2 * a) : v * (p - a / 2);
           skip = env;
-          spinAt = Math.PI + g * Math.PI * 12;                      // starts and ends hanging down behind the feet
+          spinAt = Math.PI + g * Math.PI * 16;                      // starts and ends hanging down behind the feet
           up = Math.max(0, -Math.cos(spinAt)) * 0.2 * env;         // in the air as the rope passes underneath
+          var rock = Math.sin(spinAt / 2) * env;                   // one way on one jump, the other way on the next
+          lean = rock * 0.12;
+          turn = rock * 0.32 + ease((p - 0.4) / 0.2) * Math.PI * 2;
+          headRoll = -rock * 0.12;
         } else if (trick === 'think') {
           think = env;
           if (p > 0.8) smileUntil = now + 0.9;                      // got it
@@ -302,7 +332,7 @@
       }
 
       head.rotation.set(pitch * (1 - think * 0.8) + nod - think * 0.26, yaw * (1 - think * 0.8) + headTurn + think * 0.42,
-        Math.sin(now * 0.9) * 0.025 - think * 0.13);
+        Math.sin(now * 0.9) * 0.025 - think * 0.13 + headRoll);
       // a backflip turns about the middle of the body (y = 1.5), not the feet
       root.rotation.set(flip, -0.3 + yaw * 0.3 + turn, lean);
       root.position.set(0, up + 1.5 - 1.5 * Math.cos(flip), -1.5 * Math.sin(flip));

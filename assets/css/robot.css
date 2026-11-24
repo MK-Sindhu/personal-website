@@ -1,6 +1,7 @@
 /*
   Robot: the small 3D figure that assets/js/robot.js adds to the bottom-right corner.
   It sits above the page but under the film grain, and lets every click through to the page.
+  A click on it opens .robot-menu, a small glass panel of tricks, just above it.
 */
 
 .robot{position:fixed;z-index:50;right:clamp(4px,1.5vw,20px);bottom:clamp(4px,1vw,12px);
@@ -9,3 +10,17 @@
 .robot canvas{display:block;width:100%;height:100%}
 @media (prefers-reduced-motion: reduce){ .robot{transition:none} }
 @media print{ .robot{display:none} }
+
+.robot-menu{position:fixed;z-index:60;right:clamp(8px,1.5vw,20px);bottom:calc(clamp(78px,10.5vw,150px) * 4 / 3 + clamp(8px,1vw,16px));
+  display:grid;grid-template-columns:1fr 1fr;gap:.35rem;width:13.5rem;max-width:calc(100vw - 16px);padding:.55rem;border-radius:14px;
+  background:rgba(16,18,19,.86);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 0 1px rgba(110,231,234,.28),0 0 34px -10px rgba(110,231,234,.45),0 20px 40px -18px rgba(0,0,0,.9)}
+.robot-menu[hidden]{display:none}
+.robot-menu button{min-height:2.5rem;padding:0 .5rem;border:0;border-radius:9px;cursor:pointer;
+  background:rgba(238,232,221,.07);color:var(--bone);box-shadow:inset 0 0 0 1px rgba(238,232,221,.16);
+  font-family:var(--f-mono);font-stretch:87.5%;font-size:.66rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;transition:background-color .2s ease}
+.robot-menu button:hover{background:rgba(238,232,221,.16)}
+.robot-menu .robot-menu-wide{grid-column:1 / -1;background:var(--amber);color:#1A0B03;box-shadow:none}
+.robot-menu .robot-menu-wide:hover{background:#FFC466}
+@media (prefers-reduced-motion: reduce){ .robot-menu button{transition:none} }
+@media print{ .robot-menu{display:none} }
