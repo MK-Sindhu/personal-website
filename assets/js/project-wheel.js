@@ -186,7 +186,7 @@
   function draw() {
     carousel.style.setProperty('--turn', pos.toFixed(4));
     var idx = Math.round(pos);
-    if (idx !== lastIdx) { lastIdx = idx; tick(); }
+    if (idx !== lastIdx) { lastIdx = idx; tick(); document.dispatchEvent(new Event('wheelcard')); }   // the robot nods to this
     var front = mod(idx);
     if (front !== shown) {
       shown = front;

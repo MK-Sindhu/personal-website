@@ -1,0 +1,11 @@
+/*
+  Robot: the small 3D figure that assets/js/robot.js adds to the bottom-right corner.
+  It sits above the page but under the film grain, and lets every click through to the page.
+*/
+
+.robot{position:fixed;z-index:50;right:clamp(4px,1.5vw,20px);bottom:clamp(4px,1vw,12px);
+  width:clamp(78px,10.5vw,150px);aspect-ratio:3 / 4;pointer-events:none;opacity:0;transition:opacity .6s ease}
+.robot.is-ready{opacity:1}
+.robot canvas{display:block;width:100%;height:100%}
+@media (prefers-reduced-motion: reduce){ .robot{transition:none} }
+@media print{ .robot{display:none} }

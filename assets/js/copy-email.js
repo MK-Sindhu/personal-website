@@ -15,7 +15,7 @@
   btn.addEventListener('click', function () {
     var text = email.textContent.trim();
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(function () { status.textContent = 'Copied'; }, selectEmail);
+      navigator.clipboard.writeText(text).then(function () { status.textContent = 'Copied'; document.dispatchEvent(new Event('emailcopied')); }, selectEmail);
     } else {
       selectEmail();
     }
