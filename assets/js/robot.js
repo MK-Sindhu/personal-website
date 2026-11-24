@@ -6,7 +6,10 @@
 // - waves once, shortly after it appears
 // - watches the projects wheel and nods as each card passes (the wheel sends "wheelcard" events)
 // - smiles and hops when the email address is copied ("emailcopied")
-// - does a trick when it is clicked, a different one each time: hop, spin, backflip, dance, head spin
+// - does a trick when it is clicked, picked at random: hop, spin, backflip, dance, head spin,
+//   skipping with a rope, or stopping to think
+// - now and then does one of the calmer ones by itself
+// Every trick eases in from the standing pose and back out to it, so nothing jumps.
 //
 // It is decoration only: hidden from screen readers, and it never takes a click away from the page.
 // With reduced motion it is drawn once, standing still. Without WebGL it does not appear.
@@ -182,6 +185,16 @@
       mesh(arc(0.15, 0.085, 0.35, Math.PI - 0.35), glow, smile, side * 0.29, -0.08, 0);
     });
 
+    // Props: a skipping rope (half a ring between the hands, turned about the line through them)
+    // and three thought dots above the head. Both are hidden until their trick plays.
+    var rope = mesh(new T.TorusGeometry(1, 0.022, 8, 40, Math.PI), cord, root, 0, 0.69, 0);
+    rope.visible = false;
+    var dots = [[0.72, 3.3, 0.06], [0.98, 3.48, 0.085], [1.28, 3.72, 0.115]].map(function (d) {
+      var m = mesh(new T.SphereGeometry(d[2], 14, 10), glow, scene, d[0], d[1], 0.3);
+      m.visible = false;
+      return m;
+    });
+
     /* ---------- What it reacts to ---------- */
 
     var now = 0;                       // seconds, advanced only while animating
@@ -190,9 +203,10 @@
     var waveFrom = -1, nodFrom = -1, smileUntil = 0, nextBlink = 2.5, blinkFrom = -1;
     var yaw = 0, pitch = 0;
 
-    // Tricks: name and length in seconds. A click plays the next one; `trick` is the one playing now.
-    var TRICKS = [['hop', 0.5], ['spin', 0.85], ['flip', 0.95], ['dance', 1.9], ['headspin', 0.9]];
-    var trick = null, trickFrom = 0, nextTrick = 0, calm = 0;
+    // Tricks: length in seconds, and whether it smiles all the way through.
+    var TRICKS = { hop: [0.5, 1], spin: [0.85, 1], flip: [0.95, 1], dance: [1.9, 1], headspin: [0.9, 1], skip: [3.6, 1], think: [3.6, 0] };
+    var ALL = Object.keys(TRICKS), CALM = ['think', 'skip', 'headspin', 'hop'];   // CALM: the ones it does by itself
+    var trick = '', trickFrom = 0, lastTrick = '', nextIdle = 9, calm = 0, smileShown = false;
 
     function centre(el) {
       var r = el.getBoundingClientRect();
@@ -203,24 +217,25 @@
       look.x = Math.max(-1, Math.min(1, (px - c.x) / (window.innerWidth * 0.5)));
       look.y = Math.max(-1, Math.min(1, (py - c.y) / (window.innerHeight * 0.6)));
     }
-    function play(i) {
+    function play(name) {
       if (reduce.matches) {            // no movement: just a smile for a moment
         smileUntil = now + 1;
         clearTimeout(calm);
         calm = setTimeout(function () { smileUntil = 0; kick(); }, 1200);
       } else if (!trick) {
-        trick = TRICKS[i];
+        trick = lastTrick = name;
         trickFrom = now;
-        smileUntil = now + trick[1] + 0.7;
+        if (TRICKS[name][1]) smileUntil = now + TRICKS[name][0] + 0.6;
       }
       kick();
     }
-    function cheer() { play(0); }
-    function doTrick() {
-      if (trick) return;               // let the current one finish
-      play(nextTrick);
-      nextTrick = (nextTrick + 1) % TRICKS.length;
+    function pick(names) {             // a random one, never the same twice running
+      var n;
+      do { n = names[Math.floor(Math.random() * names.length)]; } while (n === lastTrick);
+      return n;
     }
+    function cheer() { play('hop'); }
+    function doTrick() { if (!trick) play(pick(ALL)); }   // a click during a trick lets it finish
 
     window.addEventListener('pointermove', function (e) { aim(e.clientX, e.clientY); }, { passive: true });
     window.addEventListener('pointerdown', function (e) {
@@ -256,28 +271,55 @@
         var n = (now - nodFrom) / 0.32;
         if (n < 1) nod = Math.sin(n * Math.PI) * 0.2; else nodFrom = -1;
       }
-      // the trick in progress: p runs from 0 to 1 over its length
-      var up = 0, turn = 0, flip = 0, lean = 0, headTurn = 0, armsUp = 0, pump = 0;
+      // The trick in progress: p runs from 0 to 1 over its length. `env` rises from 0 to 1 at the start
+      // and falls back at the end; every pose change is scaled by it, so tricks blend in and out.
+      if (!trick && !reduce.matches && now > nextIdle) play(pick(CALM));
+      var up = 0, turn = 0, flip = 0, lean = 0, headTurn = 0, armsUp = 0, pump = 0, skip = 0, spinAt = 0, think = 0, p = 0;
       if (trick) {
-        var p = (now - trickFrom) / trick[1], name = trick[0], arcUp = Math.sin(Math.min(1, p) * Math.PI);
-        if (p >= 1) trick = null;
-        else if (name === 'hop') up = arcUp * 0.34;
-        else if (name === 'spin') { up = arcUp * 0.2; turn = ease(p) * Math.PI * 2; }
-        else if (name === 'flip') { up = arcUp * 0.6; flip = -ease(p) * Math.PI * 2; }
-        else if (name === 'headspin') headTurn = ease(p) * Math.PI * 2;
-        else if (name === 'dance') {
-          var env = ease(p / 0.12) * (1 - ease((p - 0.88) / 0.12)), beat = p * Math.PI * 8;
+        p = (now - trickFrom) / TRICKS[trick][0];
+        var arcUp = Math.sin(Math.min(1, p) * Math.PI), env = ease(p / 0.14) * (1 - ease((p - 0.86) / 0.14));
+        if (p >= 1) { trick = ''; nextIdle = now + 12 + Math.random() * 16; }
+        else if (trick === 'hop') up = arcUp * 0.34;
+        else if (trick === 'spin') { up = arcUp * 0.2; turn = ease(p) * Math.PI * 2; }
+        else if (trick === 'flip') { up = arcUp * 0.6; flip = -ease(p) * Math.PI * 2; }
+        else if (trick === 'headspin') headTurn = ease(p) * Math.PI * 2;
+        else if (trick === 'dance') {
+          var beat = p * Math.PI * 8;
           lean = Math.sin(beat) * 0.13 * env;
           up = Math.abs(Math.sin(beat)) * 0.09 * env;
           armsUp = env;
           pump = Math.sin(beat) * 0.35 * env;
+        } else if (trick === 'skip') {
+          // six turns of the rope: speeding up over the first 15%, steady, slowing over the last 15%
+          var a = 0.15, v = 1 / (1 - a), g = p < a ? v * p * p / (2 * a) : p > 1 - a ? 1 - v * (1 - p) * (1 - p) / (2 * a) : v * (p - a / 2);
+          skip = env;
+          spinAt = Math.PI + g * Math.PI * 12;                      // starts and ends hanging down behind the feet
+          up = Math.max(0, -Math.cos(spinAt)) * 0.2 * env;         // in the air as the rope passes underneath
+        } else if (trick === 'think') {
+          think = env;
+          if (p > 0.8) smileUntil = now + 0.9;                      // got it
         }
       }
 
-      head.rotation.set(pitch + nod, yaw + headTurn, Math.sin(now * 0.9) * 0.025);
+      head.rotation.set(pitch * (1 - think * 0.8) + nod - think * 0.26, yaw * (1 - think * 0.8) + headTurn + think * 0.42,
+        Math.sin(now * 0.9) * 0.025 - think * 0.13);
       // a backflip turns about the middle of the body (y = 1.5), not the feet
       root.rotation.set(flip, -0.3 + yaw * 0.3 + turn, lean);
       root.position.set(0, up + 1.5 - 1.5 * Math.cos(flip), -1.5 * Math.sin(flip));
+
+      // rope: long enough to clear the hood overhead, short enough to skim the floor underneath
+      rope.visible = skip > 0.001;
+      if (rope.visible) {
+        rope.rotation.x = spinAt;
+        rope.scale.set(1.18, (0.7 + 0.98 * (1 + Math.cos(spinAt))) * skip, 1);
+      }
+      // thought dots: they pop up one after another and float
+      dots.forEach(function (d, i) {
+        var sc = think * ease((p - 0.16 - i * 0.13) / 0.1);
+        d.visible = sc > 0.001;
+        d.scale.setScalar(sc || 0.001);
+        d.position.y = [3.3, 3.48, 3.72][i] + Math.sin(now * 3 + i) * 0.03;
+      });
 
       // breathing and a slow sway
       var breath = Math.sin(now * 1.8);
@@ -290,26 +332,32 @@
 
       // arms: hanging with a little swing; the right one waves
       var swing = Math.sin(now * 1.8 + 1) * 0.04;
-      armL.rotation.z = -0.22 - swing - (armsUp ? armsUp * 2.2 - pump : up * 1.2);
+      var out = up * 1.2 * (1 - skip) + skip * (0.55 + Math.sin(spinAt) * 0.07);   // arms lift in a jump; held out to turn the rope
+      armL.rotation.z = -0.22 - swing - (armsUp ? armsUp * 2.2 - pump : out);
       var raise = 0, wag = 0;
       if (waveFrom >= 0) {
         var w = now - waveFrom;
         if (w < 2.3) { raise = ease(w / 0.35) * (1 - ease((w - 1.9) / 0.4)); wag = Math.sin(w * 11) * 0.3 * raise; }
         else waveFrom = -1;
       }
-      armR.rotation.z = 0.22 + swing + (armsUp ? armsUp * 2.2 + pump : up * 1.2) + raise * 2.25 + wag;
+      armR.rotation.z = 0.22 + swing + (armsUp ? armsUp * 2.2 + pump : out) + raise * 2.25 + wag - think * 0.5;
+      armR.rotation.x = -think * (2.0 + Math.sin(now * 5) * 0.05);                 // hand up to the chin, tapping
 
-      // eyes: blink, or smile
+      // eyes: blink, narrow while thinking, or smile. A change of expression happens mid-blink.
       var smiling = now < smileUntil;
-      eyes.visible = !smiling;
-      smile.visible = smiling;
-      if (now > nextBlink) { blinkFrom = now; nextBlink = now + 2.2 + Math.random() * 3.5; }
+      if (reduce.matches) smileShown = smiling;
+      else if (smiling !== smileShown && blinkFrom < 0) blinkFrom = now;
+      if (now > nextBlink) { if (blinkFrom < 0) blinkFrom = now; nextBlink = now + 2.2 + Math.random() * 3.5; }
       var open = 1;
       if (blinkFrom >= 0) {
         var bl = (now - blinkFrom) / 0.16;
+        if (bl >= 0.5) smileShown = smiling;
         if (bl < 1) open = Math.abs(1 - bl * 2); else blinkFrom = -1;
       }
-      eyes.scale.y = Math.max(0.08, open);
+      eyes.visible = !smileShown;
+      smile.visible = smileShown;
+      eyes.scale.y = Math.max(0.08, open * (1 - think * 0.4));
+      smile.scale.y = Math.max(0.08, open);
     }
 
     function size() {
