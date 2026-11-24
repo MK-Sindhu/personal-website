@@ -210,6 +210,55 @@
           <p class="links"><a href="https://web-builder.ndstill.com" data-site target="_blank" rel="noopener">Visit the live site ↗</a><a href="https://github.com/MK-Sindhu/ai-app-builder" target="_blank" rel="noopener">View code on GitHub ↗</a></p>
         </article>
 
+        <article class="holo proj" data-theme="ink" aria-labelledby="arena-title">
+          <div class="viz">
+            <svg viewBox="0 0 320 120" role="img" aria-label="Diagram: a scripted caller and the agent under test exchange audio every 20 milliseconds. Both sides are recorded side by side, and the recording shows where the agent talked over a pause.">
+              <rect class="s" x="6" y="18" width="70" height="34" rx="6"/><text class="c" x="41" y="33">scripted</text><text class="c" x="41" y="44">caller</text>
+              <rect class="v" x="244" y="18" width="70" height="34" rx="6"/><text class="c" x="279" y="33">agent</text><text class="c" x="279" y="44">under test</text>
+              <path class="s" d="M80 29 H240 M235 24 L240 29 L235 34"/>
+              <path class="v" d="M240 43 H80 M85 38 L80 43 L85 48"/>
+              <text class="c" x="160" y="21">audio every 20 ms</text>
+              <text x="6" y="79">caller</text><text x="6" y="97">agent</text>
+              <path class="s" d="M60 72V80 M66 69V83 M72 73V79 M78 68V84 M84 71V81 M90 70V82 M96 73V79 M102 69V83 M108 72V80 M152 71V81 M158 68V84 M164 72V80 M170 70V82 M176 73V79"/>
+              <path class="v" d="M128 91V97 M134 89V99 M140 92V96 M146 90V98 M196 90V98 M202 87V101 M208 91V97 M214 88V100 M220 92V96 M226 89V99 M232 91V97 M238 88V100"/>
+              <rect class="fa" x="125" y="104" width="24" height="3" rx="1.5"/>
+              <text x="60" y="117">talked over a pause</text>
+              <text class="e" x="314" y="79">scored from</text><text class="e" x="314" y="117">the recording</text>
+            </svg>
+          </div>
+          <p class="kicker">Voice AI · Evaluation</p>
+          <h3 id="arena-title">Voice Agent Stress-Test Arena</h3>
+          <p class="result">30 scripted calls in Hindi, Hinglish and Indian English, scored from the recording</p>
+          <p class="desc">An automated “caller from hell” for voice agents. A scripted caller holds real-time spoken calls with an agent and deliberately sets off the situations voice agents are known to get wrong: mid-thought pauses, interruptions, filler words, background noise and changes of mind. Every metric is computed from the call recording and a timeline of the caller's actions, never from the agent's own account of itself, and a leaderboard links a playable recording of every failure. It all runs locally on open models, with no telephony and no paid API.</p>
+          <ul class="stack" aria-label="Tech stack"><li>Python</li><li>Kokoro TTS</li><li>faster-whisper</li><li>Silero VAD</li><li>Ollama</li><li>DVC</li></ul>
+          <p class="links"><a href="https://arena.kognigen.com" data-site target="_blank" rel="noopener">Visit the live site ↗</a><a href="https://github.com/MK-Sindhu/ai-voice-stress-test" target="_blank" rel="noopener">View code on GitHub ↗</a></p>
+        </article>
+
+        <article class="holo proj" data-theme="violet" aria-labelledby="eot-title">
+          <div class="viz">
+            <svg viewBox="0 0 320 120" role="img" aria-label="Diagram: speech followed by a 200 millisecond pause goes to a model that estimates whether the speaker has finished. The agent then either replies now or keeps waiting.">
+              <path class="s" d="M10 40V52 M17 34V58 M24 42V50 M31 30V62 M38 38V54 M45 33V59 M52 41V51 M59 36V56 M66 43V49 M73 32V60 M80 39V53 M87 35V57 M94 42V50 M101 37V55 M108 44V48"/>
+              <path class="v d" d="M116 46 H160"/>
+              <text class="c" x="138" y="38">pause</text><text class="c" x="138" y="60">200 ms</text>
+              <path class="s" d="M164 46 H178 M173 41 L178 46 L173 51"/>
+              <rect class="v" x="182" y="30" width="58" height="32" rx="6"/>
+              <text class="c" x="211" y="44">finished?</text><text class="c" x="211" y="55">0 to 1</text>
+              <path class="s" d="M240 46 C252 46 252 22 264 22"/>
+              <path class="s d" d="M240 46 C252 46 252 72 264 72"/>
+              <circle class="fa" cx="264" cy="22" r="4"/><circle class="f" cx="264" cy="72" r="3.5"/>
+              <text x="273" y="25.5">reply</text><text x="273" y="75.5">wait</text>
+              <text x="10" y="80">last 8 s of speech</text>
+              <text class="c" x="160" y="110">Whisper-tiny audio + MiniLM text → fusion</text>
+            </svg>
+          </div>
+          <p class="kicker">Speech AI · Work in progress</p>
+          <h3 id="eot-title">Indic End-of-Turn Detector</h3>
+          <p class="result">Same cut-off rate as a 700 ms silence timeout, about 260 ms sooner</p>
+          <p class="desc">A model that estimates whether a speaker has finished their turn, so a voice agent can reply quickly when they have and keep waiting when they are only pausing. A Whisper-tiny encoder listens to the last 8 seconds of audio, a MiniLM model reads the transcript, and a small fusion step combines the two. It trains on natural pauses in Hindi recordings from FLEURS, with word timings from forced alignment, in a DVC pipeline tracked with MLflow. It is tested on unedited recordings, by how often an agent would cut the speaker off and how long it would take to reply. It covers Hindi read speech so far and does not yet generalise: on Pipecat's Smart Turn test set, Smart Turn is ahead in all three languages tested.</p>
+          <ul class="stack" aria-label="Tech stack"><li>PyTorch</li><li>Whisper-tiny</li><li>MiniLM</li><li>DVC</li><li>MLflow</li></ul>
+          <p class="links"><a href="https://eotd.kognigen.com" data-site target="_blank" rel="noopener">Visit the live site ↗</a><a href="https://github.com/MK-Sindhu/end-of-turn-detector" target="_blank" rel="noopener">View code on GitHub ↗</a></p>
+        </article>
+
         <article class="holo proj" data-theme="orange" aria-labelledby="fraud-title">
           <div class="viz">
             <svg viewBox="0 0 320 120" role="img" aria-label="Diagram: data, training, registry and serving stages in a loop, where detected drift triggers retraining.">
